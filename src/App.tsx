@@ -95,6 +95,12 @@ const App: React.FC = () => {
     console.log("story and user input: " + storyAndUserInputs);
     // if the story is over, set the game state to genre selection
     if (storyStatus === 'completed') {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      setGameState('genreSelection');
+    }
+    if (storyStatus === 'died') {
+      // sleep for 5 seconds
+      await new Promise(resolve => setTimeout(resolve, 5000));
       setGameState('genreSelection');
     }
   };
