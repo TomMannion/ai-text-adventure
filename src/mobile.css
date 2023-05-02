@@ -78,6 +78,33 @@
   .character-info {
     order: 3;
   }
+
+  .game-output-info {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 0.5rem 1rem 1rem;
+  }
+
+  .game-output-content {
+    padding-top: 65px;
+  }
+
+  .game-output-info p:nth-child(1) {
+    position: static;
+  }
+
+  .game-output-info p:nth-child(2) {
+    position: absolute;
+    right: 1rem;
+    left: auto;
+    transform: none;
+  }
+
+  .game-output-info p:nth-child(3) {
+    position: static;
+    margin-top: 0.5rem;
+  }
 }
 
 
