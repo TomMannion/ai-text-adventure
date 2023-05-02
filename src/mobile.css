@@ -60,6 +60,11 @@
     margin: 8px 0;
   }
 
+  .genre-selection-container button,
+  .character-selection-container button {
+    width: 100%; /* Set the button width to 100% on mobile devices */
+  }
+
   /* Moving CharacterInfo below game-and-user-input */
   .playing-container {
     display: flex;
