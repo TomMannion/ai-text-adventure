@@ -1,0 +1,39 @@
+.api-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em; /* Add gap between textbox and submit button */
+  width: 400px; /* Set fixed width */
+  height: 100px; /* Set fixed height */
+}
+
+.api-wrapper {
+  margin: 0 auto; /* Center horizontally */
+  position: absolute; /* Position div absolutely */
+  top: 50%; /* Move div to the middle of the page vertically */
+  left: 50%; /* Move div to the middle of the page horizontally */
+  transform: translate(-50%, -50%); /* Move div to the middle of the page from its center point */
+}
+
+.api-input input[type='text'] {
+  width: 100%;
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.api-input button {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.api-input button:hover {
+  background-color: lime;
+  color: black;
+}

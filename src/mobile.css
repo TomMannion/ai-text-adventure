@@ -1,0 +1,85 @@
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+  /* Adjusting the container for the app */
+  .app-container {
+    flex-direction: column;
+  }
+
+  /* Adjusting GameOutput and CharacterInfo */
+  .game-output,
+  .character-info {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+
+  /* Adjusting GameOutput */
+  .game-output {
+    height: 50vh;
+    width: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+  }
+
+  /* Adjusting CharacterSelection */
+  .character-info {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 20px;
+    margin-left: 0;
+    height: auto;
+    overflow-y: auto;
+  }
+
+  /* Adjusting UserInput */
+  .user-input {
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+  }
+
+  .user-input input {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .user-input button {
+    width: 100%;
+  }
+
+  /* Adjusting CharacterInfo details */
+  .character-info .character-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .character-info .character-details h4,
+  .character-info .character-details ul,
+  .character-info .character-details p {
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  /* Moving CharacterInfo below game-and-user-input */
+  .playing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-and-user-input {
+    order: 1;
+  }
+  
+  .user-input {
+    order: 2;
+  }
+  
+  .character-info {
+    order: 3;
+  }
+}
+
+
+
+

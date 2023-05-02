@@ -1,0 +1,38 @@
+h2 {
+  margin-bottom: 0.5em;
+}
+
+.genre-selection-container {
+  border: 1px solid lime;
+  padding: 1em;
+  overflow-y: auto;
+  height: calc(100vh - 2em);
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+button {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 0.5em;
+  width: calc(50% - 0.5em - 0.25em); /* Adjust the button width */
+}
+
+button:hover {
+  background-color: lime;
+  color: black;
+}
+
+
+
+
+

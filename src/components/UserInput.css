@@ -1,0 +1,30 @@
+.user-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em; /* Add gap between textbox and submit button */
+  width: 100%;
+}
+
+.user-input input[type='text'] {
+  width: 100%;
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.user-input button {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.user-input button:hover {
+  background-color: lime;
+  color: black;
+}

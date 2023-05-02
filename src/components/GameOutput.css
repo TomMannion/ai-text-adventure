@@ -1,0 +1,9 @@
+.game-output {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 1em;
+  height: 75vh; /* Set a fixed height */
+  width: 70vw;
+  overflow-y: auto; /* Add overflow scroll */
+  padding: 1em;
+}
