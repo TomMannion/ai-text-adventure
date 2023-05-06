@@ -23,6 +23,8 @@ const APIKeyInput: React.FC<APIKeyInputProps> = ({ onAPIKeySubmit }) => {
           placeholder="API key"
           value={apiKey}
           onChange={(event) => setApiKey(event.target.value)}
+          autoComplete="api-key"
+          required
         />
         <button type="submit">Submit</button>
       </form>

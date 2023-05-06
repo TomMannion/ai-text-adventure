@@ -11,6 +11,7 @@ import fetchCharacters from './fetchCharacters';
 import fetchGenres from './fetchGenres';
 import fetchNextStoryPart from './fetchNextStoryPart';
 import APIKeyInput from './components/APIKeyInput';
+import MusicPlayer from './components/MusicPlayer'
 
 
 type GameState = 'apiKeyInput' | 'playing' | 'characterSelection' | 'loading' | 'genreSelection';
@@ -27,6 +28,9 @@ const App: React.FC = () => {
   const [turnCount, setTurnCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<string>('');
+  const [previousParagraph, setPreviousParagraph] = useState<string>('');
+  const [tempOptions, setTempOptions] = useState<{ [key: string]: string }>({});
+  const [charactersList, setCharactersList] = useState<string>('');
 
 
   useEffect(() => {
@@ -49,13 +53,15 @@ const App: React.FC = () => {
     fetchCharactersData();
   }, [chosenGenre]);
 
-  const { gameWorld, characterTraits, characterBio, characterImage, storySummary, storyStart } = useFetchGameData(chosenGenre, chosenCharacter, apiKey);
+  const { gameWorld, characterTraits, characterBio, characterImage, storySummary, storyStart, options, melody } = useFetchGameData(chosenGenre, chosenCharacter, apiKey);
 
   useEffect(() => {
     if (storyStart) {
       console.log('App storyStart:', storyStart);
+      setTempOptions(options);
       setStorySoFar([storySummary]);
       setStoryAndUserInputs([storyStart]);
+      setPreviousParagraph(storyStart);
       setGameState('playing');
     }
   }, [storyStart]);
@@ -85,11 +91,14 @@ const App: React.FC = () => {
     // set the loading state to true
     setIsLoading(true);
     // use the fetchNextStoryPart function to get the next part of the story
-    const { nextPart, summaryOfNextPart, storyStatus } = await fetchNextStoryPart(storySoFar.join(" - "), input, characterTraits, characterBio, gameWorld, apiKey);
-    setStorySoFar([...storySoFar, summaryOfNextPart]);
+    const { nextPart, summaryOfNextPart, storyStatus, options, updatedCharactersSummary } = await fetchNextStoryPart(chosenCharacter, storySoFar.slice(-36).join(' - '), input, characterTraits, characterBio, chosenGenre, apiKey, previousParagraph, charactersList);
+    setTempOptions(options);
+    setCharactersList(updatedCharactersSummary);
+    setStorySoFar([...storySoFar, input, summaryOfNextPart]);
     // add the user input to the story and user inputs array
     setStoryAndUserInputs([...storyAndUserInputs, input, nextPart]);
     // increment the turn count
+    setPreviousParagraph(nextPart);
     setIsLoading(false);
     setTurnCount(turnCount + 1);
     console.log("story and user input: " + storyAndUserInputs);
@@ -122,8 +131,9 @@ const App: React.FC = () => {
       {gameState === 'playing' && (
         <div className="playing-container">
           <div className="game-and-user-input">
-            <GameOutput output={storyAndUserInputs} genre={chosenGenre} turnCount={turnCount} isLoading={isLoading} />
-            <UserInput handleSubmit={handleUserInput} />
+            <GameOutput output={storyAndUserInputs} genre={chosenGenre} turnCount={turnCount} isLoading={isLoading} options={tempOptions} handleOptionsClick={handleUserInput} />
+            {/* <MusicPlayer melody={melody} /> */}
+            {/* <UserInput handleSubmit={handleUserInput} /> */}
           </div>
           <CharacterInfo characterName={chosenCharacter} characterTraits={characterTraits} characterBio={characterBio} characterImage={characterImage} />
         </div>

@@ -5,6 +5,7 @@
   gap: 1em; /* Add gap between textbox and submit button */
   width: 400px; /* Set fixed width */
   height: 100px; /* Set fixed height */
+  padding: 1em;
 }
 
 .api-wrapper {

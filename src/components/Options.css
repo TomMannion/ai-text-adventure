@@ -1,0 +1,18 @@
+.options {
+  display: flex;
+  align-items: stretch; /* Add this */
+  gap: 8px; /* Add this for spacing between buttons */
+}
+
+.options button {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  display: flex; /* Change from inline-flex to flex */
+  align-items: center; /* Add this */
+  justify-content: center; /* Add this */
+  flex-grow: 1; /* Add this */
+}

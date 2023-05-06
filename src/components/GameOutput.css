@@ -1,24 +1,25 @@
 .game-output {
   position: relative;
   text-align: left;
-  width: 100%;
+  top: 0;
   margin-bottom: 1em;
-  height: 75vh; 
+  height: 90vh;
   width: 70vw;
-  overflow-y: auto; 
-  /* padding: 1em; */
+  overflow-y: auto;
+  padding: 0 1em 1em 1em;
 }
 
 .game-output-info {
-  display: flex; 
-  position: absolute;
-  top: 0;
+  display: flex;
+  position: sticky;
+  top: 0; /* Set top to 0 */
   left: 0;
   right: 0;
   height: 60px;
   background-color: black;
   padding: 0.5rem 1rem;
   box-sizing: border-box;
+  z-index: 10; /* Add z-index to ensure it stays above the content */
 }
 
 .game-output-info p:nth-child(1) {
@@ -37,7 +38,6 @@
   right: 1rem;
 }
 
-
 .game-output-content {
-  padding-top: 60px;
+  padding-top: 0;
 }

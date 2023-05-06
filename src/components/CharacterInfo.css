@@ -17,6 +17,7 @@
   width: 25vw;
   gap: 0.5em;
   padding: 1em;
+  text-align: center;
 }
 
 .character-info > h3,
