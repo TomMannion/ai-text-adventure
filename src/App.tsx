@@ -132,7 +132,7 @@ const App: React.FC = () => {
         <div className="playing-container">
           <div className="game-and-user-input">
             <GameOutput output={storyAndUserInputs} genre={chosenGenre} turnCount={turnCount} isLoading={isLoading} options={tempOptions} handleOptionsClick={handleUserInput} />
-            {/* <MusicPlayer melody={melody} /> */}
+            {/* <MusicPlayer genre={'TraditionalHorror'} /> */}
             {/* <UserInput handleSubmit={handleUserInput} /> */}
           </div>
           <CharacterInfo characterName={chosenCharacter} characterTraits={characterTraits} characterBio={characterBio} characterImage={characterImage} />

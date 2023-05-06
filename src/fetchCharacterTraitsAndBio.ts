@@ -41,7 +41,18 @@ Personality traits:
 Bio: {This is where you should write the short detailed bio for the main character.}
 `;
 const prompt2 = `
-Based on the chosen genre "${chosenGenre}" and the character you are playing as "${chosenCharacter}", please provide a list of 5 character personality traits, a short back story in no more than ${maxWords} words, and a song using ToneJS write a full song including intro, middle and ending, around 24 bars, they can however all be combined into one long string and do not need lyrics. make it sound like the style of the ${chosenGenre} genre for a text based adventure game. make it be able to loop towards the end so it can repeat seamlessly. The back story should not mention what the character plans to do next. Format the response as follows:
+Based on the chosen genre "${chosenGenre}" and the character you are playing as "${chosenCharacter}", please provide a list of 5 character personality traits, a short back story in no more than ${maxWords} words, The back story should not mention what the character plans to do next.
+Write a song using ToneJS with the following:
+- Make it sound like the style of the ${chosenGenre} genre for a text based adventure game
+- it does not need lyrics
+- it does not need a description
+- it should be able to loop towards the end so it can repeat seamlessly
+- pick a bpm that you think is appropriate for the genre
+- it should be at least 30 seconds long
+- pick a key that you think is appropriate for the genre
+- the format should be a string of notes and durations separated by commas with a hyphen between the note and the duration e.g. "C4-0.5, D4-0.5, E4-0.5, F4-0.5, G4-0.5, A4-0.5, B4-0.5, C5-0.5"
+
+Format the response as follows:
 
 Personality traits:
 1. {trait_1}
@@ -52,10 +63,12 @@ Personality traits:
 
 Bio: {This is where you should write the short detailed bio for the main character.}
 
-Melody: {Use a format like e.g. "C4-1.0", where each note is followed by its duration this is just an example note and duration, you can use any note or duration for example 5.0 or even 0.01 or anything inbetween, separated by a dash and a comma. the whole song should be in here in one long string.}
+Melody: {This is where you should write the melody for the song.}
+
+Bpm: {This is where you should write the bpm for the song.}
 
 `
-  const fetchedCharacterTraitsAndBio = await chatGPTRequest(characterTraitsAndBioPrompt, apiKey);
+  const fetchedCharacterTraitsAndBio = await chatGPTRequest(prompt2, apiKey);
   console.log(fetchedCharacterTraitsAndBio);
   
   // Extract traits
@@ -72,20 +85,20 @@ Melody: {Use a format like e.g. "C4-1.0", where each note is followed by its dur
   const bio = bioMatch ? bioMatch[1] : '';
 
   // Extract melody
-  // const melodyRegex = /^Melody:\s*(.*)$/m;
-  // const melodyMatch = melodyRegex.exec(fetchedCharacterTraitsAndBio[0]);
-  // const melodyString = melodyMatch ? melodyMatch[1] : '';
+  const melodyRegex = /^Melody:\s*(.*)$/m;
+  const melodyMatch = melodyRegex.exec(fetchedCharacterTraitsAndBio[0]);
+  const melodyString = melodyMatch ? melodyMatch[1] : '';
 
-  // // Convert melody string to an array of objects
-  // const melody = melodyString.split(',').map(note => {
-  //   const [pitch, duration] = note.trim().split('-');
-  //   return { pitch, duration: parseFloat(duration) };
-  // });
+  // Convert melody string to an array of objects
+  const melody = melodyString.split(',').map(note => {
+    const [pitch, duration] = note.trim().split('-');
+    return { pitch, duration: parseFloat(duration) };
+  });
 
   // also use this bio to generate an image of the character
   const characterImage = await dallERequest(traits, chosenGenre, bio, chosenCharacter, apiKey);
 
-  return { traits, bio, characterImage, melody: [] };
+  return { traits, bio, characterImage, melody};
 };
 
 export default fetchCharacterTraitsAndBio;

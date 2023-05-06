@@ -1,47 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import { Synth, start, Transport, Part } from 'tone';
+import * as Tone from 'tone';
+
+type GenreSettings = {
+  scale: string[];
+  loopInterval: number;
+  synthSettings: Tone.SynthOptions;
+};
 
 interface MusicPlayerProps {
-  melody: { pitch: string; duration: number }[];
+  genre: string;
 }
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({ melody }) => {
+const MusicPlayer: React.FC<MusicPlayerProps> = ({ genre }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [part, setPart] = useState<Part | null>(null);
 
-  const togglePlaying = async () => {
-    if (!isPlaying) {
-      await start();
-    }
+  const genreSettings: Record<string, GenreSettings> = {
+    Fantasy: {
+      scale: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'],
+      loopInterval: Tone.Time('4n').toSeconds(),
+      synthSettings: {
+        oscillator: {
+          type: 'triangle',
+          phase: 0,
+          volume: 0,
+          mute: false,
+          onstop: () => {},
+        },
+        envelope: {
+          attack: 0.005,
+          decay: 0.1,
+          sustain: 0.3,
+          release: 1,
+          attackCurve: 'linear',
+          decayCurve: 'exponential',
+          releaseCurve: 'exponential',
+        },
+        portamento: 0,
+        onsilence: () => {},
+        detune: 0,
+        volume: 0,
+        context: new Tone.Context(),
+      },
+    },
+    TraditionalHorror: {
+        scale: ['C3', 'C#3', 'E3', 'F3', 'F#3', 'A3', 'B3'],
+        loopInterval: Tone.Time('1m').toSeconds(),
+        synthSettings: {
+          oscillator: {
+            type: 'sawtooth',
+            phase: 0,
+            volume: 0,
+            mute: false,
+            onstop: () => {},
+          },
+          envelope: {
+            attack: 1,
+            decay: 2,
+            sustain: 0.5,
+            release: 3,
+            attackCurve: 'linear',
+            decayCurve: 'exponential',
+            releaseCurve: 'exponential',
+          },
+          portamento: 0,
+          onsilence: () => {},
+          detune: 0,
+          volume: -10,
+          context: new Tone.Context(),
+        },
+      },
+    
+    // ... the other genre settings
+  };
+
+  const togglePlaying = () => {
     setIsPlaying(!isPlaying);
   };
 
   useEffect(() => {
-    const synth = new Synth().toDestination();
+    if (!genreSettings[genre]) {
+      console.error(`Invalid genre: ${genre}`);
+      return;
+    }
 
-    const newPart = new Part(((time, note: { pitch: string; duration: number }) => {
-      synth.triggerAttackRelease(note.pitch, note.duration, time);
-    }), melody);
+    const { scale, loopInterval, synthSettings } = genreSettings[genre];
+    const synth = new Tone.Synth(synthSettings).toDestination();
 
-    newPart.loop = true;
-    setPart(newPart);
+    const loop = new Tone.Loop((time) => {
+      const note = scale[Math.floor(Math.random() * scale.length)];
+      synth.triggerAttackRelease(note, loopInterval, time);
+    }, loopInterval);
+
+    if (isPlaying) {
+      Tone.start();
+      loop.start(0);
+      Tone.Transport.start();
+    } else {
+      loop.stop(0);
+      Tone.Transport.stop();
+    }
 
     return () => {
-      newPart.dispose();
+      loop.stop();
+      loop.dispose();
+      Tone.Transport.stop();
     };
-  }, [melody]);
-
-  useEffect(() => {
-    if (part) {
-      if (isPlaying) {
-        part.start();
-        Transport.start();
-      } else {
-        part.stop();
-        Transport.stop();
-      }
-    }
-  }, [isPlaying, part]);
+  }, [isPlaying, genre]);
 
   return (
     <div>
