@@ -1,12 +1,14 @@
-import React, { FC } from 'react';
-import './GenreSelection.css';
+import React, { useContext } from 'react';
+import { AppContext } from '../AppContext';
 
 interface GenreSelectionProps {
   genres: string[];
-  onGenreSelect: (genre: string) => void;
 }
 
-const GenreSelection: FC<GenreSelectionProps> = ({ genres, onGenreSelect }) => {
+const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
+  const { state, setState } = useContext(AppContext);
+
+
   return (
     <>
       <h2>Select a genre:</h2>
@@ -14,7 +16,9 @@ const GenreSelection: FC<GenreSelectionProps> = ({ genres, onGenreSelect }) => {
         {genres.map((genre, index) => (
           <button
             key={genre}
-            onClick={() => onGenreSelect(genre)}
+            onClick={() => {
+              setState({ ...state, chosenGenre: genre, gameState: 'characterSelection' });
+            }}
             style={{ marginRight: index % 2 === 0 ? '0.5em' : '0', marginBottom: '0.5em' }}
           >
             {genre}
@@ -26,5 +30,6 @@ const GenreSelection: FC<GenreSelectionProps> = ({ genres, onGenreSelect }) => {
 };
 
 export default GenreSelection;
+
 
 

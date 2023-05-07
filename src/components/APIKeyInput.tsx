@@ -1,17 +1,14 @@
-// APIKeyInput.tsx
-import React, { useState } from 'react';
-import './APIKeyInput.css'
+import React, { useState, useContext } from 'react';
+import './APIKeyInput.css';
+import { AppContext } from '../AppContext';
 
-interface APIKeyInputProps {
-  onAPIKeySubmit: (apiKey: string) => void;
-}
-
-const APIKeyInput: React.FC<APIKeyInputProps> = ({ onAPIKeySubmit }) => {
+const APIKeyInput: React.FC = () => {
+  const { state, setState } = useContext(AppContext);
   const [apiKey, setApiKey] = useState<string>('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onAPIKeySubmit(apiKey);
+    setState({ ...state, apiKey, gameState: 'genreSelection' });
   };
 
   return (

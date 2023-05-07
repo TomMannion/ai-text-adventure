@@ -1,5 +1,3 @@
-import chatGPTRequest from './chatGPT';
-
 const fetchGenres = async () => {
   // const genresPrompt = 'List 10 unique story genres for a text-based adventure game in this format 1.genre1, 2.genre2,...10.genre10';
   // const fetchedGenres = await chatGPTRequest(genresPrompt);

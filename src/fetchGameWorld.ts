@@ -1,4 +1,4 @@
-import chatGPTRequest from './chatGPT';
+import chatGPTRequest from './chatGPTRequest';
 
 const fetchGameWorld = async (chosenGenre: string, chosenCharacter: string, apiKey: string) => {
   const maxWords = 80;
