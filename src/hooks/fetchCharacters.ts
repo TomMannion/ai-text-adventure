@@ -1,5 +1,3 @@
-import chatGPTRequest from './chatGPT';
-
 const fetchCharacters = async (chosenGenre: string) => {
   // const charactersPrompt = `List 10 unique character names for a "${chosenGenre}" text-based adventure game:`;
   // const fetchedCharacters = await chatGPTRequest(charactersPrompt);

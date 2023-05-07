@@ -15,7 +15,7 @@
 
   /* Adjusting GameOutput */
   .game-output {
-    height: 50vh;
+    height:60vh;
     width: 100%;
     max-width: 100%;
     overflow-y: auto;
@@ -109,6 +109,12 @@
   .game-output-info p:nth-child(3) {
     position: static;
     margin-top: 0.5rem;
+  }
+
+  .options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Add this line */
   }
 }
 
