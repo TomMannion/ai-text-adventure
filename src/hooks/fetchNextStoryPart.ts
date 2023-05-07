@@ -19,32 +19,29 @@ const fetchNextStoryPart = async (
 ): Promise<NextStoryPart> => {
 
   const prompt3 = `
-  The text-based adventure game's current story summary: "${storySummary}" please use this to create the next part of the story in "story".
-  The user's choice based on the previous paragraph is: "${input}".
+  In the text-based adventure game, the user is playing as the character ${chosenCharacter} in the ${chosenGenre} genre. The character has personality traits "${characterTraits.join('", "')}" and the backstory "${characterBio}". The current story summary is: "${storySummary}", and the last paragraph to continue from is: "${previousParagraph}". The user's choice based on the previous paragraph is: "${input}".
 
-  Considering the following concepts for creating compelling writing in a text-based adventure game set in the ${chosenGenre} genre, please provide the next part of the story referring to the user's choice and current story summary continuing on from where the summary stops taking into account the following concepts:
-
-  Hooking the reader with captivating sentences
-  Using vivid language and sensory details
-  Maintaining tension and suspense
-  Giving meaningful choices with consequences
-  Developing interesting characters
-  Balancing action, dialogue, and description
-  Twists and surprises
-  Subverting expectations
-
-  the story is allowed to end, but it is not required to, if character dies, please set storyStatus to "you died", if the story is completed, please set storyStatus to "completed", if the story is still in progress, please set storyStatus to "in progress".
-
-  You are playing as the character ${chosenCharacter}.
-  Their personality is "${characterTraits.join('", "')}", and back story is "${characterBio}".
-  Please also provide a summary of the story so far in "summary", it should include the summary so far, any characters currently in the story, next part of the story you provide and the user's choice based on the previous paragraph in 400 words or less.
-  Provide the user with a random number of options (3 to 5) to choose from, giving them ample opportunities to comment on the scene or options.
-
-  Ensure the output is a JSON object with the exact following format:
-
+  Please create the next part of the story in "story", continuing from where the summary left off and referring to the user's choice. While writing, consider the following elements:
+  
+  - Captivating sentences to hook the reader
+  - Vivid language and sensory details
+  - Tension and suspense maintenance
+  - Meaningful choices with consequences
+  - Interesting character development
+  - A balance of action, dialogue, and description
+  - Twists and surprises
+  - Subverted expectations
+  
+  The story can end or continue. If the character dies, set the storyStatus to "you died". If the story is completed, set the storyStatus to "completed". If the story is still in progress, set the storyStatus to "in progress".
+  
+  Additionally, provide a summary of the story so far in "summary" (400 words maximum). The summary should include the current summary, characters in the story, their locations, positions in the scene, and the next part of the story. Also, the summary must provide detailed information about any character who has interacted in the story, including their actions, dialogues, and relationships with other characters. This will ensure that these characters can be easily referenced and seamlessly incorporated into the story later on. Don't forget to mention the user's choice based on the previous paragraph.
+  Also, give the user a random number of options in "options" (3 to 5) for their next move.
+  
+  Ensure the output is a JSON object with the following format:
+  
   {
-    story: "{please ensure the next part of the start is here, between 65-150 words}",
-    summary: "{summary of story so far, no more than 400 words}",
+    story: "{next part of the story, between 65-150 words}",
+    summary: "{summary of the story so far, no more than 400 words}",
     storyStatus: "{in progress, completed, you died}",
     options: {
       option1: "Option 1",
