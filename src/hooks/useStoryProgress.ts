@@ -13,8 +13,7 @@ const useStoryProgress = () => {
       nextPartOfStory, 
       nextStorySummary,
       storyStatus, 
-      options, 
-      updatedCharactersSummary 
+      options
     } = await fetchNextStoryPart(
       storySummary,
       previousParagraph,
@@ -23,7 +22,6 @@ const useStoryProgress = () => {
       chosenGenre,
       characterTraits,
       characterBio,
-      charactersList,
       apiKey,
     );
 
@@ -34,7 +32,6 @@ const useStoryProgress = () => {
       turnCount: prevState.turnCount + 1,
       previousParagraph: nextPartOfStory,
       options,
-      characterList: updatedCharactersSummary,
       isLoading: false,
     }));
     console.log('nextStorySummary: ' + nextStorySummary);

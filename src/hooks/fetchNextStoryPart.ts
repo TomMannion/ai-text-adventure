@@ -4,7 +4,6 @@ interface NextStoryPart {
   nextPartOfStory: string;
   nextStorySummary: string;
   storyStatus: string;
-  updatedCharactersSummary: string;
   options: { [key: string]: string };
 }
 
@@ -16,16 +15,14 @@ const fetchNextStoryPart = async (
   chosenGenre: string,
   characterTraits: string[],
   characterBio: string,
-  charactersList: string,
   apiKey: string,
 ): Promise<NextStoryPart> => {
 
   const prompt3 = `
-  The text-based adventure game story so far is: "${storySummary}".
-  The previous paragraph provided in full is: "${previousParagraph}".
+  The text-based adventure game's current story summary: "${storySummary}" please use this to create the next part of the story in "story".
   The user's choice based on the previous paragraph is: "${input}".
 
-  Considering the following concepts for creating compelling writing in a text-based adventure game set in the ${chosenGenre} genre, please provide the next part of the story referring to the user's choice and the previous paragraph taking into account the following concepts:
+  Considering the following concepts for creating compelling writing in a text-based adventure game set in the ${chosenGenre} genre, please provide the next part of the story referring to the user's choice and current story summary continuing on from where the summary stops taking into account the following concepts:
 
   Hooking the reader with captivating sentences
   Using vivid language and sensory details
@@ -36,9 +33,10 @@ const fetchNextStoryPart = async (
   Twists and surprises
   Subverting expectations
 
+  the story is allowed to end, but it is not required to, if character dies, please set storyStatus to "you died", if the story is completed, please set storyStatus to "completed", if the story is still in progress, please set storyStatus to "in progress".
+
   You are playing as the character ${chosenCharacter}.
   Their personality is "${characterTraits.join('", "')}", and back story is "${characterBio}".
-  The current list of characters in the story is: "${charactersList}". Please find a way to involve these characters in the story, either by having them exit the story or by being an active part of the story. Also, provide a summary of any new characters and current characters still left in the story in charactersSummary.
   Please also provide a summary of the story so far in "summary", it should include the summary so far, any characters currently in the story, next part of the story you provide and the user's choice based on the previous paragraph in 400 words or less.
   Provide the user with a random number of options (3 to 5) to choose from, giving them ample opportunities to comment on the scene or options.
 
@@ -48,7 +46,6 @@ const fetchNextStoryPart = async (
     story: "{please ensure the next part of the start is here, between 65-150 words}",
     summary: "{summary of story so far, no more than 400 words}",
     storyStatus: "{in progress, completed, you died}",
-    charactersSummary: "{summary of new and current characters, no more than 50 words}",
     options: {
       option1: "Option 1",
       option2: "Option 2",
@@ -85,7 +82,6 @@ const fetchNextStoryPart = async (
       const nextStorySummary = responseObject.summary;
       const storyStatus = responseObject.storyStatus;
       const options = responseObject.options;
-      const updatedCharactersSummary = responseObject.updatedCharactersSummary;
   
       // Filter out options with empty strings
       const filteredOptions: { [key: string]: string } = {};
@@ -106,7 +102,6 @@ const fetchNextStoryPart = async (
         nextPartOfStory,
         nextStorySummary,
         storyStatus,
-        updatedCharactersSummary,
         options: filteredOptions,
       };
     } catch (error) {
