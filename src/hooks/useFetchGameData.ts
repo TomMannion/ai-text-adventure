@@ -16,8 +16,8 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
         const loadingProgress = [characterTraits, characterBio, characterImage].filter(Boolean).length * 25;
         setLoadingProgress(loadingProgress);
 
-        const { storyStart, storySummary, options } = await fetchStartOfStory(chosenGenre, chosenCharacter, characterTraits, characterBio, apiKey);
-        setState(prevState => ({ ...prevState, storyStart, storySummary, options, isLoading: false, storyAndUserInputs: [storyStart] }));
+        const { storyStart, options } = await fetchStartOfStory(chosenGenre, chosenCharacter, characterTraits, characterBio, apiKey);
+        setState(prevState => ({ ...prevState, storyStart, storySummary: storyStart, options, isLoading: false, storyAndUserInputs: [storyStart] }));
         setLoadingProgress(100);
       }
     };

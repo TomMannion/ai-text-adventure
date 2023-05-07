@@ -31,7 +31,6 @@ const fetchStartOfStory = async (
 
   {
     storyStart: "the story start should go here, between 65-150 words",
-    summary: "summary of story start, no more than 30 words",
     options: {
       option1: "Option 1",
       option2: "Option 2",

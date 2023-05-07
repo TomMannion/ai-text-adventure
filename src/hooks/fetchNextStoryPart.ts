@@ -2,7 +2,7 @@ import chatGPTRequest from '../chatGPTRequest';
 
 interface NextStoryPart {
   nextPartOfStory: string;
-  summaryOfNextPart: string;
+  nextStorySummary: string;
   storyStatus: string;
   updatedCharactersSummary: string;
   options: { [key: string]: string };
@@ -39,14 +39,14 @@ const fetchNextStoryPart = async (
   You are playing as the character ${chosenCharacter}.
   Their personality is "${characterTraits.join('", "')}", and back story is "${characterBio}".
   The current list of characters in the story is: "${charactersList}". Please find a way to involve these characters in the story, either by having them exit the story or by being an active part of the story. Also, provide a summary of any new characters and current characters still left in the story in charactersSummary.
-
+  Please also provide a summary of the story so far in "summary", it should include the summary so far, any characters currently in the story, next part of the story you provide and the user's choice based on the previous paragraph in 400 words or less.
   Provide the user with a random number of options (3 to 5) to choose from, giving them ample opportunities to comment on the scene or options.
 
   Ensure the output is a JSON object with the exact following format:
 
   {
     story: "{please ensure the next part of the start is here, between 65-150 words}",
-    summary: "{summary_of_story_start, no more than 30 words}",
+    summary: "{summary of story so far, no more than 400 words}",
     storyStatus: "{in progress, completed, you died}",
     charactersSummary: "{summary of new and current characters, no more than 50 words}",
     options: {
@@ -82,7 +82,7 @@ const fetchNextStoryPart = async (
   
       // Extract the story_start, summary, and options from the responseObject
       const nextPartOfStory = responseObject.story;
-      const summaryOfNextPart = responseObject.summary;
+      const nextStorySummary = responseObject.summary;
       const storyStatus = responseObject.storyStatus;
       const options = responseObject.options;
       const updatedCharactersSummary = responseObject.updatedCharactersSummary;
@@ -104,7 +104,7 @@ const fetchNextStoryPart = async (
       // Return the extracted data as a TypeScript object
       return {
         nextPartOfStory,
-        summaryOfNextPart,
+        nextStorySummary,
         storyStatus,
         updatedCharactersSummary,
         options: filteredOptions,

@@ -9,7 +9,13 @@ const useStoryProgress = () => {
 
   const handleUserInput = async (input: string) => {
     setState(prevState => ({ ...prevState, isLoading: true, input }));
-    const { nextPartOfStory, summaryOfNextPart, storyStatus, options, updatedCharactersSummary } = await fetchNextStoryPart(
+    const { 
+      nextPartOfStory, 
+      nextStorySummary,
+      storyStatus, 
+      options, 
+      updatedCharactersSummary 
+    } = await fetchNextStoryPart(
       storySummary,
       previousParagraph,
       input,
@@ -23,7 +29,7 @@ const useStoryProgress = () => {
 
     setState(prevState => ({
       ...prevState,
-      storySoFar: [...prevState.storySoFar, input, summaryOfNextPart],
+      storySummary: nextStorySummary,
       storyAndUserInputs: [...prevState.storyAndUserInputs, input, nextPartOfStory],
       turnCount: prevState.turnCount + 1,
       previousParagraph: nextPartOfStory,
@@ -31,6 +37,7 @@ const useStoryProgress = () => {
       characterList: updatedCharactersSummary,
       isLoading: false,
     }));
+    console.log('nextStorySummary: ' + nextStorySummary);
 
     if (storyStatus === 'completed' || storyStatus === 'died') {
       await new Promise(resolve => setTimeout(resolve, 5000));
