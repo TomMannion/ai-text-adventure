@@ -16,7 +16,7 @@ const fetchStartOfStory = async (
   apiKey: string
 ): Promise<StartOfStory> => {
   const prompt3 = `
-  In the text-based adventure game, the user plays as ${chosenCharacter} in the ${chosenGenre} genre, with traits "${characterTraits.join('", "')}" and backstory "${characterBio}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
+  In the text-based adventure game, the user plays as ${chosenCharacter} in the ${chosenGenre} genre, with traits "${characterTraits.join('", "')}" and bio "${characterBio}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
 
   - Avoiding clichés
   - Writing captivating sentences
@@ -44,7 +44,7 @@ const fetchStartOfStory = async (
       option5: "Option 5, if applicable"
     }
   }
-  
+
   `
 
   const response = await chatGPTRequest(prompt3, apiKey);

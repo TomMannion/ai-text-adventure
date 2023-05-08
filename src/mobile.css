@@ -118,7 +118,15 @@
   }
 
   .character-selection-container {
-    width: 80vw;
+    width: 90vw;
+  }
+
+  .api-wrapper {
+    width: 90vw;
+  }
+
+  .api-input {
+    width: 90%;
   }
 }
 
