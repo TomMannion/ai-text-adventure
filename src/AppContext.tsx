@@ -5,7 +5,7 @@ type GameState = 'apiKeyInput' | 'playing' | 'characterSelection' | 'loading' | 
 type AppState = {
   gameState: GameState;
   genres: string[];
-  characters: string[];
+  characters: object;
   chosenGenre: string;
   chosenCharacter: string;
   characterTraits: string[];
@@ -37,7 +37,7 @@ const AppContext = createContext<AppContextType>({
   state: {
     gameState: 'apiKeyInput',
     genres: [],
-    characters: [],
+    characters: {},
     chosenGenre: '',
     chosenCharacter: '',
     characterTraits: [],
@@ -70,7 +70,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, setState] = useState<AppState>({
     gameState: 'apiKeyInput',
     genres: [],
-    characters: [],
+    characters: {},
     chosenGenre: '',
     chosenCharacter: '',
     characterTraits: [],

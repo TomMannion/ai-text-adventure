@@ -6,9 +6,9 @@ import useFetchCharacters from '../hooks/useFetchCharacters';
 const CharacterSelectionContainer: React.FC = () => {
   const { state } = useContext(AppContext);
   const { chosenGenre } = state;
-  const characters = useFetchCharacters(chosenGenre);
+  const { firstNames, lastNames } = useFetchCharacters(chosenGenre);
 
-  return <CharacterSelection characters={characters} />;
+  return <CharacterSelection firstNames={firstNames} lastNames={lastNames} />;
 };
 
 export default CharacterSelectionContainer;

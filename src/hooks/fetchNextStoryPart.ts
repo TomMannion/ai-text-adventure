@@ -1,8 +1,10 @@
 import chatGPTRequest from '../chatGPTRequest';
+import processJson from '../utils/processJson';
+import filterOptions from '../utils/filterOptions';
 
 interface NextStoryPart {
-  nextPartOfStory: string;
-  nextStorySummary: string;
+  storySegment: string;
+  newStorySummary: string;
   storyStatus: string;
   options: { [key: string]: string };
 }
@@ -19,30 +21,27 @@ const fetchNextStoryPart = async (
 ): Promise<NextStoryPart> => {
 
   const prompt3 = `
-  In the text-based adventure game, the user is playing as the character ${chosenCharacter} in the ${chosenGenre} genre. The character has personality traits "${characterTraits.join('", "')}" and the backstory "${characterBio}". The current story summary is: "${storySummary}", and the last paragraph to continue from is: "${previousParagraph}". The user's choice based on the previous paragraph is: "${input}".
+  "In the text-based adventure game, the user plays as ${chosenCharacter} in the ${chosenGenre} genre, with traits "${characterTraits.join('", "')}" and bio "${characterBio}". Your task is to craft a compelling story segment (65-200 words) following the previous paragraph, user's choice "${input}", and the summary "${storySummary}". Focus on:
 
-  Please create the next part of the story in "story", continuing from where the summary left off and referring to the user's choice. While writing, consider the following elements:
+  - Maintaining consistency with the story so far
+  - Avoiding clichés
+  - Writing captivating sentences
+  - Using vivid language and sensory details
+  - Building tension and suspense
+  - Developing meaningful choices and consequences
+  - Expanding on interesting characters and relationships
+  - Balancing action, dialogue, and description
+  - Incorporating twists, surprises, and subverted expectations
   
-  - Captivating sentences to hook the reader
-  - Vivid language and sensory details
-  - Tension and suspense maintenance
-  - Meaningful choices with consequences
-  - Interesting character development
-  - A balance of action, dialogue, and description
-  - Twists and surprises
-  - Subverted expectations
+  Based on the story segment, provide the user with 3 to 5 options in "options" that naturally follow the current part of the story, offering opportunities for them to interact with the scene or explore the options. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths.
   
-  The story can end or continue. If the character dies, set the storyStatus to "you died". If the story is completed, set the storyStatus to "completed". If the story is still in progress, set the storyStatus to "in progress".
+  Provide a concise summary (max 400 words) in "newStorySummary" that covers the details of the current story segment, including characters' interactions, locations, positions, actions, dialogues, relationships, and items. This summary should capture all important details and serve as a reference to build the next paragraph, without expanding the story beyond the current segment.
   
-  Additionally, provide a summary of the story so far in "summary" (400 words maximum). The summary should include the current summary, characters in the story, their locations, positions in the scene, and the next part of the story. Also, the summary must provide detailed information about any character who has interacted in the story, including their actions, dialogues, and relationships with other characters. This will ensure that these characters can be easily referenced and seamlessly incorporated into the story later on. Don't forget to mention the user's choice based on the previous paragraph.
-  Also, give the user a random number of options in "options" (3 to 5) for their next move.
-  
-  Ensure the output is a JSON object with the following format:
+  Output a JSON object with the following format:
   
   {
-    story: "{next part of the story, between 65-150 words}",
-    summary: "{summary of the story so far, no more than 400 words}",
-    storyStatus: "{in progress, completed, you died}",
+    storySegment: "{story segment, 65-200 words}",
+    newStorySummary: "{summary, max 400 words}",
     options: {
       option1: "Option 1",
       option2: "Option 2",
@@ -51,63 +50,19 @@ const fetchNextStoryPart = async (
       option5: "Option 5, if applicable"
     }
   }
+  "
+  
   `
   const response = await chatGPTRequest(prompt3, apiKey);
 
-  const lenientJsonParse = (jsonString: string): any => {
-    try {
-      // Remove trailing commas from JSON string
-      const cleanedJsonString = jsonString.replace(/,(\s*[\]}])/g, '$1');
-  
-      // Parse the cleaned JSON string into a JavaScript object
-      const jsonObject = JSON.parse(cleanedJsonString);
-  
-      return jsonObject;
-    } catch (error) {
-      console.error('Error parsing JSON response with lenient method:', error);
-      throw error;
-    }
-  };
+  const responseObject: NextStoryPart = processJson<NextStoryPart>(response[0]);
 
-  const processJson = (response: string): NextStoryPart => {
-    try {
-      // Parse the JSON-formatted response string into a JavaScript object
-      const responseObject = lenientJsonParse(response);
-  
-      // Extract the story_start, summary, and options from the responseObject
-      const nextPartOfStory = responseObject.story;
-      const nextStorySummary = responseObject.summary;
-      const storyStatus = responseObject.storyStatus;
-      const options = responseObject.options;
-  
-      // Filter out options with empty strings
-      const filteredOptions: { [key: string]: string } = {};
-      for (const key in options) {
-        if (
-          options[key].trim() !== null &&
-          options[key].trim() !== '' &&
-          options[key].trim() !== undefined &&
-          options[key].trim() !== 'undefined' &&
-          options[key].trim() !== 'null'
-        ) {
-          filteredOptions[key] = options[key];
-        }
-      }
-  
-      // Return the extracted data as a TypeScript object
-      return {
-        nextPartOfStory,
-        nextStorySummary,
-        storyStatus,
-        options: filteredOptions,
-      };
-    } catch (error) {
-      console.error('Error parsing JSON response:', error);
-      throw error;
-    }
-  };
+  // Filter options
+  const filteredOptions = filterOptions(responseObject.options);
+  responseObject.options = filteredOptions;
 
-  return processJson(response[0]);
+
+  return responseObject;
 
 };
 

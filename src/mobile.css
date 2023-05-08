@@ -116,6 +116,10 @@
     justify-content: center;
     flex-wrap: wrap; /* Add this line */
   }
+
+  .character-selection-container {
+    width: 80vw;
+  }
 }
 
 

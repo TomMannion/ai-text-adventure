@@ -1,19 +1,18 @@
-// hooks/useStoryProgress.ts
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import fetchNextStoryPart from './fetchNextStoryPart';
 
 const useStoryProgress = () => {
   const { state, setState } = useContext(AppContext);
-  const { storySummary, previousParagraph, chosenCharacter, chosenGenre, characterTraits, characterBio, charactersList, apiKey } = state;
+  const { storySummary, previousParagraph, chosenCharacter, chosenGenre, characterTraits, characterBio, apiKey } = state;
 
   const handleUserInput = async (input: string) => {
     setState(prevState => ({ ...prevState, isLoading: true, input }));
     const { 
-      nextPartOfStory, 
-      nextStorySummary,
+      storySegment, 
+      newStorySummary,
       storyStatus, 
-      options
+      options,
     } = await fetchNextStoryPart(
       storySummary,
       previousParagraph,
@@ -27,14 +26,13 @@ const useStoryProgress = () => {
 
     setState(prevState => ({
       ...prevState,
-      storySummary: nextStorySummary,
-      storyAndUserInputs: [...prevState.storyAndUserInputs, input, nextPartOfStory],
-      turnCount: prevState.turnCount + 1,
-      previousParagraph: nextPartOfStory,
+      storySummary: newStorySummary,
+      storyAndUserInputs: [...prevState.storyAndUserInputs, input, storySegment],
+      storyStatus, turnCount: prevState.turnCount + 1,
+      previousParagraph: storySegment,
       options,
       isLoading: false,
     }));
-    console.log('nextStorySummary: ' + nextStorySummary);
 
     if (storyStatus === 'completed' || storyStatus === 'died') {
       await new Promise(resolve => setTimeout(resolve, 5000));

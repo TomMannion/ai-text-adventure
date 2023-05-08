@@ -16,21 +16,26 @@ const fetchStartOfStory = async (
   apiKey: string
 ): Promise<StartOfStory> => {
   const prompt3 = `
-  Please create an engaging and compelling opening for a text-based adventure game set in the ${chosenGenre} genre, focusing on the following aspects:
-  - Hook the reader with a captivating sentence.
-  - Use vivid language and sensory details.
-  - Introduce tension or suspense.
-  - Present the main character in an interesting manner.
-  - Balance action, dialogue, and description.
+  In the text-based adventure game, the user plays as ${chosenCharacter} in the ${chosenGenre} genre, with traits "${characterTraits.join('", "')}" and backstory "${characterBio}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
 
-  you are playing as the character ${chosenCharacter}.
-  their personality is "${characterTraits.join('", "')}", and back story is "${characterBio}".
-  Based on the setting and these guidelines, craft an opening paragraph or scene that instantly grabs the reader's attention and sets the stage for the adventure to come. The word count should be between 65 and 200 words. Provide the user with a random number of options (3 to 5) to choose from, giving them ample opportunities to comment on the scene or options.
-
-  Ensure you are outputting a JSON object with the following format:
-
+  - Avoiding clichés
+  - Writing captivating sentences
+  - Using vivid language and sensory details
+  - Building tension and suspense
+  - Introducing meaningful choices and consequences
+  - Presenting interesting characters and relationships
+  - Balancing action, dialogue, and description
+  - Incorporating twists, surprises, and subverted expectations
+  
+  Based on the opening paragraph or scene, provide the user with 3 to 5 options that naturally follow the story's beginning, offering ample opportunities for them to interact with the scene or explore the options. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths.
+  
+  Provide a concise summary (max 400 words) in "storySummary" that covers only the details present in the opening scene, including characters' interactions, locations, positions, actions, dialogues, relationships, and items. This summary should capture all important details and serve as a reference to build the next paragraph, without expanding the story beyond the opening scene.
+  
+  Output a JSON object with the following format:
+  
   {
-    storyStart: "the story start should go here, between 65-150 words",
+    storyStart: "{opening paragraph or scene, 65-200 words}",
+    storySummary: "{summary, max 400 words}",
     options: {
       option1: "Option 1",
       option2: "Option 2",
@@ -39,6 +44,7 @@ const fetchStartOfStory = async (
       option5: "Option 5, if applicable"
     }
   }
+  
   `
 
   const response = await chatGPTRequest(prompt3, apiKey);
