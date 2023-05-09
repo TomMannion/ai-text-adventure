@@ -16,7 +16,7 @@ const fetchStartOfStory = async (
   apiKey: string
 ): Promise<StartOfStory> => {
   const prompt3 = `
-  In the text-based adventure game, the user plays as ${chosenCharacter} in the ${chosenGenre} genre, with traits "${characterTraits.join('", "')}" and bio "${characterBio}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
+  In the text-based adventure game, the user plays as the main character: ${chosenCharacter}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
 
   - Avoiding clichés
   - Writing captivating sentences
@@ -31,7 +31,7 @@ const fetchStartOfStory = async (
   
   Provide a concise summary (max 400 words) in "storySummary" that covers only the details present in the opening scene, including characters' interactions, locations, positions, actions, dialogues, relationships, and items. This summary should capture all important details and serve as a reference to build the next paragraph, without expanding the story beyond the opening scene.
   
-  Output a JSON object with the following format:
+  Strictly only output a JSON object with the following format:
   
   {
     storyStart: "{opening paragraph or scene, 65-200 words}",

@@ -8,7 +8,7 @@
   transform: translate(-50%, -50%); /* Move div to the middle of the page from its center point */
 }
 
-.component-container {
+.api-container {
   border: 1px solid lime;
   padding: 1em;
   display: flex;
@@ -16,7 +16,7 @@
   align-items: center;
 }
 
-.component-container form {
+.api-container form {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
@@ -32,7 +32,7 @@
   box-sizing: border-box;
 }
 
-.component-container button {
+.api-container button {
   background-color: black;
   color: lime;
   border: 1px solid lime;
@@ -43,7 +43,7 @@
   width: 100%;
 }
 
-.component-container button:hover {
+.api-container button:hover {
   background-color: lime;
   color: black;
 }

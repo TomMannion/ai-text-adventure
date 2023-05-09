@@ -16,7 +16,7 @@ const dallERequest = async (traits: string[], chosenGenre: string, bio: string, 
   Ensure the characters face is clearly visible and the background, DO NOT INCLUDE ANY TEXT.
   `;
 
-  const prompt = `Create a square portrait (256x256 pixels) of a character's face for a ${chosenGenre} text-based adventure game with a black background. The character's name is ${chosenCharacter}, and their traits are: ${traits.join(', ')}. The image should be detailed and realistic, with a focus on the character's facial features that represent their traits and genre. Ensure the image has no text in it.`;
+  const prompt = `Create a square pixel art portrait (256x256 pixels) of a character's face for a ${chosenGenre} text-based adventure game, set against a solid black background. The character's name is ${chosenCharacter}, and their traits are: ${traits.join(', ')}. The image should be detailed, and portray the character's facial features that represent their traits and genre. Focus on creating the pixel art style while ensuring there is no text in the image. The portrait should only show the character's face, without any distractions or background elements.`;
 
   const body = {
     prompt: prompt,

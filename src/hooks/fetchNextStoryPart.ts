@@ -21,7 +21,8 @@ const fetchNextStoryPart = async (
 ): Promise<NextStoryPart> => {
 
   const prompt3 = `
-  "In the text-based adventure game, the user plays as ${chosenCharacter} in the ${chosenGenre} genre, with traits "${characterTraits.join('", "')}" and bio "${characterBio}". Your task is to craft a compelling story segment (65-200 words) following the previous paragraph, user's choice "${input}", and the summary "${storySummary}". Focus on:
+  In the text-based adventure game, the user plays as the main character: ${chosenCharacter}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}".
+  Your task is to craft a compelling story segment (65-200 words) following the previous paragraph: ${previousParagraph}, user's choice: "${input}", and the previous summary "${storySummary}". Focus on:
 
   - Maintaining consistency with the story so far
   - Avoiding clichés
@@ -35,9 +36,18 @@ const fetchNextStoryPart = async (
   
   Based on the story segment, provide the user with 3 to 5 options in "options" that naturally follow the current part of the story, offering opportunities for them to interact with the scene or explore the options. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths.
   
-  Provide a concise summary (max 400 words) in "newStorySummary" that covers the details of the current story segment, including characters' interactions, locations, positions, actions, dialogues, relationships, and items. This summary should capture all important details and serve as a reference to build the next paragraph, without expanding the story beyond the current segment.
-  
-  Output a JSON object with the following format:
+  Provide a comprehensive summary of, previous summary, previous paragraph, user choice and the new story segment to be created (max 400 words) in "newStorySummary" that precisely captures all crucial details from the current story segment, serving as a reference to build the next paragraph without expanding the story beyond the current segment. Ensure that the summary includes:
+
+  - A detailed breakdown of character interactions, including actions, dialogues, emotions, and reactions
+  - The exact locations of all characters, specifying their positions and any changes in location during the segment
+  - The current inventory of items for each character, including the acquisition, usage, or loss of items
+  - Any changes in the relationships between characters, such as alliances, conflicts, or other significant interactions
+  - Key events, decisions, or discoveries that impact the direction of the story or the characters' motivations
+  - Any other vital information required for maintaining continuity and consistency in the unfolding narrative
+ 
+  Strictly use "storySegment", "newStorySummary", and "options" variables in the JSON object.
+
+  Strictly only output a JSON object with the following format:
   
   {
     storySegment: "{story segment, 65-200 words}",
@@ -50,8 +60,7 @@ const fetchNextStoryPart = async (
       option5: "Option 5, if applicable"
     }
   }
-  "
-  
+
   `
   const response = await chatGPTRequest(prompt3, apiKey);
 

@@ -15,7 +15,7 @@ const APIKeyInput: React.FC = () => {
   return (
     <div className="api-wrapper">
       <h2>Enter your OpenAI API key:</h2>
-      <div className="component-container">
+      <div className="api-container">
         <form onSubmit={handleSubmit} className="api-input">
           <input
             type="text"
