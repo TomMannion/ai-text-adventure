@@ -85,32 +85,37 @@
   }
 
   .game-output-info {
+    display: flex;
     flex-direction: column;
+    flex-wrap: wrap; /* Added to wrap elements to the next line */
     align-items: flex-start;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
     height: auto;
-    padding: 0.5rem 1rem 1rem;
-  }
-
-  .game-output-content {
-    padding-top: 65px;
-  }
-
+    background-color: black;
+    padding: 0.5rem 1rem 0;
+    box-sizing: border-box;
+    z-index: 10;
+  }  
+  
   .game-output-info p:nth-child(1) {
+    padding-top: 0;
+    margin-top: 0;
     position: static;
+    width: 100%;
   }
 
   .game-output-info p:nth-child(2) {
-    position: absolute;
-    right: 1rem;
-    left: auto;
-    transform: none;
-  }
-
-  .game-output-info p:nth-child(3) {
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 0;
     position: static;
-    margin-top: 0.5rem;
+    width: 100%;
   }
-
+  
+  
   .options {
     display: flex;
     justify-content: center;

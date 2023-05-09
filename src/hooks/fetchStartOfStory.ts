@@ -27,9 +27,16 @@ const fetchStartOfStory = async (
   - Balancing action, dialogue, and description
   - Incorporating twists, surprises, and subverted expectations
   
-  Based on the opening paragraph or scene, provide the user with 3 to 5 options that naturally follow the story's beginning, offering ample opportunities for them to interact with the scene or explore the options. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths.
+  Based on the story segment, provide the user with 3 to 5 options in "options" that naturally follow the current part of the story, offering opportunities for them to interact with the scene or explore the options. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths.
   
-  Provide a concise summary (max 400 words) in "storySummary" that covers only the details present in the opening scene, including characters' interactions, locations, positions, actions, dialogues, relationships, and items. This summary should capture all important details and serve as a reference to build the next paragraph, without expanding the story beyond the opening scene.
+  Provide a comprehensive summary of opening story segment to be created (max 400 words) in "storySummary" that precisely captures all crucial details from the current story segment, serving as a reference to build the next paragraph without expanding the story beyond the current segment. Ensure that the summary includes:
+
+  - A detailed breakdown of character interactions, including actions, dialogues, emotions, and reactions
+  - The exact locations of all characters, specifying their positions and any changes in location during the segment
+  - The current inventory of items for each character, including the acquisition, usage, or loss of items
+  - Any changes in the relationships between characters, such as alliances, conflicts, or other significant interactions
+  - Key events, decisions, or discoveries that impact the direction of the story or the characters' motivations
+  - Any other vital information required for maintaining continuity and consistency in the unfolding narrative
   
   Strictly only output a JSON object with the following format:
   
