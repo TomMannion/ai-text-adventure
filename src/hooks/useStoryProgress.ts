@@ -26,7 +26,7 @@ const useStoryProgress = () => {
 
     setState(prevState => ({
       ...prevState,
-      storySummary: newStorySummary,
+      storySummary: [...prevState.storySummary, input, newStorySummary],
       storyAndUserInputs: [...prevState.storyAndUserInputs, input, storySegment],
       storyStatus, turnCount: prevState.turnCount + 1,
       previousParagraph: storySegment,

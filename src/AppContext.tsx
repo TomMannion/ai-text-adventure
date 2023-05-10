@@ -13,8 +13,8 @@ type AppState = {
   characterImage: string;
   characterList: string;
   storyStart: string;
-  storySummary: string;
-  options: { [key: string]: string };
+  storySummary: string[];
+  options: { [key: string]: { text: string; risk: string } };
   input: string;
   storySoFar: string[];
   storyAndUserInputs: string[];
@@ -45,7 +45,7 @@ const AppContext = createContext<AppContextType>({
     characterImage: '',
     characterList: '',
     storyStart: '',
-    storySummary: '',
+    storySummary: [],
     options: {},
     input: '',
     storySoFar: [],
@@ -78,7 +78,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     characterImage: '',
     characterList: '',
     storyStart: '',
-    storySummary: '',
+    storySummary: [],
     options: {},
     input: '',
     storySoFar: [],

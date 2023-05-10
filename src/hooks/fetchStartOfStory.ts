@@ -1,11 +1,11 @@
 import chatGPTRequest from '../chatGPTRequest';
 import processJson from '../utils/processJson';
-import filterOptions from '../utils/filterOptions';
+import filterOptionsNew from '../utils/filterOptionsNew';
 
 interface StartOfStory {
   storyStart: string;
   storySummary: string;
-  options: { [key: string]: string };
+  options: { [key: string]: { text: string; risk: string } };
 }
 
 const fetchStartOfStory = async (
@@ -29,7 +29,7 @@ const fetchStartOfStory = async (
   
   Based on the story segment, provide the user with 3 to 5 options in "options" that naturally follow the current part of the story, offering opportunities for them to interact with the scene or explore the options. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths.
   
-  Provide a comprehensive summary of opening story segment to be created (max 400 words) in "storySummary" that precisely captures all crucial details from the current story segment, serving as a reference to build the next paragraph without expanding the story beyond the current segment. Ensure that the summary includes:
+  Provide a comprehensive summary of opening story segment to be created (max 45 words) in "storySummary" that precisely captures all crucial details from the current story segment, serving as a reference to build the next paragraph without expanding the story beyond the current segment. Ensure that the summary includes:
 
   - A detailed breakdown of character interactions, including actions, dialogues, emotions, and reactions
   - The exact locations of all characters, specifying their positions and any changes in location during the segment
@@ -42,13 +42,28 @@ const fetchStartOfStory = async (
   
   {
     storyStart: "{opening paragraph or scene, 65-200 words}",
-    storySummary: "{summary, max 400 words}",
+    storySummary: "{summary, max 45 words}",
     options: {
-      option1: "Option 1",
-      option2: "Option 2",
-      option3: "Option 3",
-      option4: "Option 4, if applicable",
-      option5: "Option 5, if applicable"
+      option1: { 
+        text: "{option text, 10-30 words}",
+        risk: "{risk level, low, medium, high}",
+      },
+      option2: {
+        text: "{option text, 10-30 words}",
+        risk: "{risk level, low, medium, high}",
+      },
+      option3: {
+        text: "{option text, 10-30 words}",
+        risk: "{risk level, low, medium, high}",
+      },
+      option4: {
+        text: "{option text, 10-30 words}",
+        risk: "{risk level, low, medium, high}",
+      },
+      option5: {
+        text: "{option text, 10-30 words}",
+        risk: "{risk level, low, medium, high}",
+      }
     }
   }
 
@@ -58,7 +73,7 @@ const fetchStartOfStory = async (
   const responseObject: StartOfStory = processJson<StartOfStory>(response[0]);
 
   // Filter options
-  const filteredOptions = filterOptions(responseObject.options);
+  const filteredOptions = filterOptionsNew(responseObject.options);
   responseObject.options = filteredOptions;
 
   return responseObject;

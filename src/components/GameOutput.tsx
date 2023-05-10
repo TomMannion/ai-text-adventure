@@ -8,7 +8,7 @@ interface GameOutputProps {
   genre: string;
   turnCount: number;
   isLoading: boolean;
-  options: { [key: string]: string };
+  options: { [key: string]: { text: string, risk: string } };
   handleOptionsClick: (optionText: string) => void;
 }
 
