@@ -1,9 +1,15 @@
+// src/components/Options.tsx
 import React from 'react';
 import './Options.css';
 
+interface Option {
+  text: string;
+  risk: string;
+}
+
 interface OptionsProps {
-  options: { [key: string]: { text: string, risk: string } };
-  handleClick: (optionKey: string) => void;
+  options: { [key: string]: Option };
+  handleClick: (option: Option) => void; // Update the type here
 }
 
 const Options: React.FC<OptionsProps> = ({ options, handleClick }) => {
@@ -11,7 +17,7 @@ const Options: React.FC<OptionsProps> = ({ options, handleClick }) => {
     <div className="options">
       {Object.entries(options).map(([optionKey, option]) => (
         <button
-          onClick={() => handleClick(option.text)}
+          onClick={() => handleClick(option)} // Pass the whole option object
           key={optionKey}
         >
           {optionKey}: {option.text}

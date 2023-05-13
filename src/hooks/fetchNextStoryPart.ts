@@ -12,7 +12,7 @@ interface NextStoryPart {
 const fetchNextStoryPart = async (
   storySummary: string[],
   previousParagraph: string,
-  input: string,
+  input: { text: string; risk: string }, // Update the type of the function parameter
   chosenCharacter: string,
   chosenGenre: string,
   characterTraits: string[],
@@ -21,22 +21,22 @@ const fetchNextStoryPart = async (
 ): Promise<NextStoryPart> => {
 
   const prompt = `
-  In the text-based adventure game, the user plays as the main character: ${chosenCharacter}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}".
-  Your task is to craft a interesting story segment (65-200 words) following the previous paragraph: ${previousParagraph}, user's choice: "${input}", and the summary of previous segments and choices "${storySummary.slice(-16).join(' - ')}". Focus on:
+  In the text-based adventure game, the user plays as the main character: "${chosenCharacter}", in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}".
+  Your task is to craft an interesting next story segment (65-200 words) that follows the narrative established by the previous paragraph: "${previousParagraph}". Take into consideration the user's action based on the previous paragraph: "${input.text}", and the summary of previous segments and user's choices: "${storySummary.slice(-16).join(' - ')}". Focus on the following aspects:
 
+  high (death chance +7%, max 80%), medium, low.
+  - Punishment/reward chances based on risk: high (67%/33%), medium (47%/53%), low (25%/75%)
   - Maintaining consistency with the story so far
   - Avoiding clichés
-  - If you introduce an enemy or entity try to to avoid being vague, give it a name or/and a detailed varied description
+  - Provide detailed descriptions, especially for creatures or entities; give them a name or a vivid, varied description if not already mentioned, to prevent repetitiveness
   - try to not repeat similar story segments, try to make each segment unique and interesting
   - Weight up the users previous choices and segments and current choice based on the previous paragraph, if you deem the user's choice as risky it is your choice to punish (punishment can include death) them or give them a reward
-  - it is you choice if the story segment is positive or negative, but it must be interesting and engaging
-  - Writing captivating sentences
-  - Using vivid language and sensory details
   - Building tension and suspense
   - Developing meaningful choices and consequences
   - Expanding on interesting characters and relationships
   - Balancing action, dialogue, and description
-  - Incorporating twists, surprises, and subverted expectations
+  - Evaluating the summary of the previous segments and choices you should look for moments you can climax and complete the story arc when you deem it appropriate or kill off the character if you deem it appropriate.
+  - the next segement should not contain the previous paragraph
   
   Based on the story segment, provide the user with 3 to 5 options in "options" that focus on:
   - Creating engaging, detailed, unique and interesting options
@@ -62,33 +62,36 @@ const fetchNextStoryPart = async (
   Strictly only output a JSON object with the following format:
   
   {
-    storySegment: "{story segment, 65-200 words}",
-    newStorySummary: "{summary, max 45 words}",
-    options: {
-      option1: { 
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
-      },
-      option2: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
-      },
-      option3: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
-      },
-      option4: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
-      },
-      option5: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
+    {
+      "storyStart": "{opening paragraph or scene, 65-200 words}",
+      "storySummary": "{summary, max 45 words}",
+      "options": {
+        "option1": { 
+          "text": "{option text, 10-30 words}",
+          "risk": "{risk level, low, medium, high}",
+        },
+        "option2": {
+          "text": "{option text, 10-30 words}",
+          "risk": "{risk level, low, medium, high}",
+        },
+        "option3": {
+          "text": "{option text, 10-30 words}",
+          "risk": "{risk level, low, medium, high}",
+        },
+        option4: {
+          text: "{option text, 10-30 words}",
+          risk: "{risk level, low, medium, high}",
+        },
+        option5: {
+          "text": "{option text, 10-30 words}",
+          "risk": "{risk level, low, medium, high}",
+        }
       }
     }
-  }
 
   `
+
+console.log("storySummary: " + storySummary.slice(-16).join(' - '))
   let response;
   let responseObject: NextStoryPart = {
     storySegment: '',
@@ -118,58 +121,3 @@ const fetchNextStoryPart = async (
 };
 
 export default fetchNextStoryPart;
-
-
-  // const parseResponse = (responseText: string): NextStoryPart => {
-  //   console.log('responseText', responseText)
-  //   const nextPartLine = responseText.match(/next part:.*?(?=Summary:)/si)?.[0];
-  //   const summaryOfNextPartLine = responseText.match(/summary:.*?(?=game status:)/si)?.[0];
-  //   const storyStatusLine = responseText.match(/game status:.*$/si)?.[0];
-  
-  //   const nextPartOfStory = nextPartLine?.slice(nextPartLine.indexOf(':') + 1).trim() ?? '';
-  //   const summaryOfNextPart = summaryOfNextPartLine?.slice(summaryOfNextPartLine.indexOf(':') + 1).trim() ?? '';
-  //   const storyStatus = storyStatusLine?.slice(storyStatusLine.indexOf(':') + 1).trim() ?? '';
-
-  //   // add console.log statements here to debug
-  //   console.log('nextPartOfStory', nextPartOfStory);
-  //   console.log('summaryOfNextPart', summaryOfNextPart);
-  //   console.log('storyStatus', storyStatus);
-  //   return { nextPartOfStory, summaryOfNextPart, storyStatus, options: {} };
-  // };
-
-  // const customParseResponse = (response: string): NextStoryPart => {
-  //   try {
-  //     const storyMatch = response.match(/"storyStart":\s+"([^"]*)"/);
-  //     const nextPartOfStory = storyMatch ? storyMatch[1] : '';
-  
-  //     const summaryMatch = response.match(/"summary":\s+"([^"]*)"/);
-  //     const summaryOfNextPart = summaryMatch ? summaryMatch[1] : '';
-  
-  //     const storyStatusMatch = response.match(/"storyStatus":\s+"([^"]*)"/);
-  //     const storyStatus = storyStatusMatch ? storyStatusMatch[1] : '';
-  
-  //     const updatedCharactersSummaryMatch = response.match(/"updatedCharactersSummary":\s+"([^"]*)"/);
-  //     const updatedCharactersSummary = updatedCharactersSummaryMatch ? updatedCharactersSummaryMatch[1] : '';
-  
-  //     const options: { [key: string]: string } = {};
-  //     const optionsRegex = /"option\d+":\s+"([^"]*)"/g;
-  //     let optionMatch: RegExpExecArray | null;
-  
-  //     while ((optionMatch = optionsRegex.exec(response)) !== null) {
-  //       const optionText = optionMatch[1];
-  //       const optionNumber = optionMatch[0].match(/\d+/)![0];
-  //       options['option' + optionNumber] = optionText;
-  //     }
-  
-  //     return {
-  //       nextPartOfStory,
-  //       summaryOfNextPart,
-  //       storyStatus,
-  //       updatedCharactersSummary,
-  //       options,
-  //     };
-  //   } catch (error) {
-  //     console.error('Error parsing custom response:', error);
-  //     throw error;
-  //   }
-  // };

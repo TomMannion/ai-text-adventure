@@ -3,13 +3,18 @@ import './GameOutput.css';
 import Options from './Options';
 import LoadingOverlay from './LoadingOverlay';
 
+interface Option {
+  text: string;
+  risk: string;
+}
+
 interface GameOutputProps {
   output: string[];
   genre: string;
   turnCount: number;
   isLoading: boolean;
   options: { [key: string]: { text: string, risk: string } };
-  handleOptionsClick: (optionText: string) => void;
+  handleOptionsClick: (option: Option) => void;
 }
 
 const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoading, options, handleOptionsClick }) => {

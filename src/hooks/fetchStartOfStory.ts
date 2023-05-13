@@ -16,9 +16,10 @@ const fetchStartOfStory = async (
   apiKey: string
 ): Promise<StartOfStory> => {
   const prompt3 = `
-  In the text-based adventure game, the user plays as the main character: ${chosenCharacter}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
+  In the text-based adventure game, the user plays as the main character: ${chosenCharacter}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}". Your task is to craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
 
   - Avoiding clichés
+  - Try to create a unique and interesting setting
   - Writing captivating sentences
   - Using vivid language and sensory details
   - Building tension and suspense
@@ -41,28 +42,28 @@ const fetchStartOfStory = async (
   Strictly only output a JSON object with the following format:
   
   {
-    storyStart: "{opening paragraph or scene, 65-200 words}",
-    storySummary: "{summary, max 45 words}",
-    options: {
-      option1: { 
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
+    "storyStart": "{opening paragraph or scene, 65-200 words}",
+    "storySummary": "{summary, max 45 words}",
+    "options": {
+      "option1": { 
+        "text": "{option text, 10-30 words}",
+        "risk": "{risk level, low, medium, high}",
       },
-      option2: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
+      "option2": {
+        "text": "{option text, 10-30 words}",
+        "risk": "{risk level, low, medium, high}",
       },
-      option3: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
+      "option3": {
+        "text": "{option text, 10-30 words}",
+        "risk": "{risk level, low, medium, high}",
       },
       option4: {
         text: "{option text, 10-30 words}",
         risk: "{risk level, low, medium, high}",
       },
       option5: {
-        text: "{option text, 10-30 words}",
-        risk: "{risk level, low, medium, high}",
+        "text": "{option text, 10-30 words}",
+        "risk": "{risk level, low, medium, high}",
       }
     }
   }
