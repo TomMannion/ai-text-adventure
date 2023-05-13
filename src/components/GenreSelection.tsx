@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../AppContext';
+import './GenreSelection.css';
 
 interface GenreSelectionProps {
   genres: string[];

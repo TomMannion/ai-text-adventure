@@ -1,14 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import './GameOutput.css';
 import Options from './Options';
+import LoadingOverlay from './LoadingOverlay';
+
+interface Option {
+  text: string;
+  risk: string;
+}
 
 interface GameOutputProps {
   output: string[];
   genre: string;
   turnCount: number;
   isLoading: boolean;
-  options: { [key: string]: string };
-  handleOptionsClick: (optionText: string) => void;
+  options: { [key: string]: { text: string, risk: string } };
+  handleOptionsClick: (option: Option) => void;
 }
 
 const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoading, options, handleOptionsClick }) => {
@@ -28,7 +34,6 @@ const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoa
       <div className="game-output-info">
         <p>Genre: {genre}</p>
         <p>Turns: {turnCount}</p>
-        <p>{isLoading ? 'Loading response...' : ''}</p>
       </div>
       <div className="game-output-content">
         {output.map((text, index) => (
@@ -44,6 +49,7 @@ const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoa
         ))}
       </div>
       <div ref={bottomRef}></div> {/* Add the bottom element with the ref */}
+      <LoadingOverlay show={isLoading} />
     </div>
   );
 };

@@ -1,0 +1,53 @@
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.loading-text {
+  font-size: 24px;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  animation: loadingDots 1.5s infinite;
+  font-size: 24px;
+}
+
+.dot-1 {
+  animation-delay: 0s;
+}
+
+.dot-2 {
+  animation-delay: 0.3s;
+}
+
+.dot-3 {
+  animation-delay: 0.6s;
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.loading-overlay.hidden {
+  display: none;
+}
+
+.loading-overlay.visible {
+  display: flex;
+}

@@ -1,21 +1,26 @@
-// Options.tsx
+// src/components/Options.tsx
 import React from 'react';
 import './Options.css';
 
+interface Option {
+  text: string;
+  risk: string;
+}
+
 interface OptionsProps {
-  options: { [key: string]: string };
-  handleClick: (optionKey: string) => void;
+  options: { [key: string]: Option };
+  handleClick: (option: Option) => void; // Update the type here
 }
 
 const Options: React.FC<OptionsProps> = ({ options, handleClick }) => {
   return (
     <div className="options">
-      {Object.entries(options).map(([optionKey, optionText]) => (
+      {Object.entries(options).map(([optionKey, option]) => (
         <button
-          onClick={() => handleClick(optionText)}
+          onClick={() => handleClick(option)} // Pass the whole option object
           key={optionKey}
         >
-          {optionKey}: {optionText}
+          {optionKey}: {option.text}
         </button>
       ))}
     </div>

@@ -1,40 +1,49 @@
-.api-input {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1em; /* Add gap between textbox and submit button */
-  width: 400px; /* Set fixed width */
-  height: 100px; /* Set fixed height */
-  padding: 1em;
-}
-
+/* APIKeyInput.css */
 .api-wrapper {
   margin: 0 auto; /* Center horizontally */
   position: absolute; /* Position div absolutely */
+  text-align: center;
   top: 50%; /* Move div to the middle of the page vertically */
   left: 50%; /* Move div to the middle of the page horizontally */
   transform: translate(-50%, -50%); /* Move div to the middle of the page from its center point */
 }
 
-.api-input input[type='text'] {
-  width: 100%;
+.api-container {
+  border: 1px solid lime;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.api-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.api-input input {
   background-color: black;
   color: lime;
   border: 1px solid lime;
-  padding: 0.5em;
-  margin-bottom: 0.5em;
+  padding: 0.5em 1em;
+  font-family: 'Courier New', Courier, monospace;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.api-input button {
+.api-container button {
   background-color: black;
   color: lime;
   border: 1px solid lime;
   padding: 0.5em 1em;
   cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
   transition: background-color 0.3s, color 0.3s;
+  width: 100%;
 }
 
-.api-input button:hover {
+.api-container button:hover {
   background-color: lime;
   color: black;
 }

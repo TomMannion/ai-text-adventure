@@ -2,20 +2,47 @@ h2 {
   margin-bottom: 0.5em;
 }
 
+.character-selection-wrapper {
+  margin: 0 auto; /* Center horizontally */
+  position: absolute; /* Position div absolutely */
+  text-align: center;
+  top: 50%; /* Move div to the middle of the page vertically */
+  left: 50%; /* Move div to the middle of the page horizontally */
+  transform: translate(-50%, -50%); /* Move div to the middle of the page from its center point */
+}
+
 .character-selection-container {
   border: 1px solid lime;
   padding: 1em;
-  overflow-y: auto;
-  height: calc(100vh - 2em);
-  width: 70%;
-  margin: 0 auto;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+
+.character-selection-container form {
+  display: flex;
+  flex-direction: column;
   gap: 0.5em;
 }
 
-button {
+.names-container {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.character-selection-container input {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  font-family: 'Courier New', Courier, monospace;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.character-selection-container button {
   background-color: black;
   color: lime;
   border: 1px solid lime;
@@ -23,11 +50,10 @@ button {
   cursor: pointer;
   font-family: 'Courier New', Courier, monospace;
   transition: background-color 0.3s, color 0.3s;
-  margin-bottom: 0.5em;
-  width: calc(50% - 0.5em - 0.25em); /* Adjust the button width */
+  width: 100%;
 }
 
-button:hover {
+.character-selection-container button:hover {
   background-color: lime;
   color: black;
 }

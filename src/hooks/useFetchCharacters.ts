@@ -2,19 +2,21 @@ import { useState, useEffect } from 'react';
 import fetchCharacters from './fetchCharacters';
 
 const useFetchCharacters = (chosenGenre: string) => {
-  const [characters, setCharacters] = useState<string[]>([]);
+  const [firstNames, setFirstNames] = useState<string[]>([]);
+  const [lastNames, setLastNames] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchCharactersData = async () => {
       if (chosenGenre !== '') {
-        const charactersData = await fetchCharacters(chosenGenre);
-        setCharacters(charactersData);
+        const { firstNames, lastNames } = await fetchCharacters();
+        setFirstNames(firstNames);
+        setLastNames(lastNames);
       }
     };
     fetchCharactersData();
   }, [chosenGenre]);
 
-  return characters;
+  return { firstNames, lastNames };
 };
 
 export default useFetchCharacters;

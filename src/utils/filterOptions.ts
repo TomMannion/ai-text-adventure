@@ -2,9 +2,9 @@ const filterOptions = (options: { [key: string]: string }): { [key: string]: str
   const filteredOptions: { [key: string]: string } = {};
   for (const key in options) {
     if (
-      options[key].trim() !== null &&
+      options[key] !== null &&
+      options[key] !== undefined &&
       options[key].trim() !== '' &&
-      options[key].trim() !== undefined &&
       options[key].trim() !== 'undefined' &&
       options[key].trim() !== 'null'
     ) {
