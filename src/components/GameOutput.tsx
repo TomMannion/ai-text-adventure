@@ -26,7 +26,7 @@ const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoa
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the bottom element smoothly
     }
-  }, [output]); // Run the effect whenever the output prop changes
+  }, [output, isLoading]); // Add isLoading dependency to the effect
   
   console.log('GameOutput output:', output);
   return (
@@ -48,8 +48,8 @@ const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoa
           </div>
         ))}
       </div>
-      <div ref={bottomRef}></div> {/* Add the bottom element with the ref */}
       <LoadingOverlay show={isLoading} />
+      <div ref={bottomRef}></div> {/* Add the bottom element with the ref */}
     </div>
   );
 };

@@ -21,8 +21,12 @@ const dallERequest = async (chosenGenre: string, chosenCharacter: string, charac
   Ensure the character portrait matches the environment they will be set in based on the genre provided.
   `;
 
+  const prompt2 = `
+  High-Res pixel art of a ${characterGender} character from the genre ${chosenGenre} as a profile picture. close up of the face. the character has ${characterFacialFeatures.join(', ')}.
+  `
+
   const body = {
-    prompt: prompt,
+    prompt: prompt2,
     n: 1,
     size: "256x256",
   };

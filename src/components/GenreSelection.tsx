@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../AppContext';
 import './GenreSelection.css';
 
@@ -8,11 +8,30 @@ interface GenreSelectionProps {
 
 const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
   const { state, setState } = useContext(AppContext);
+  const [customGenre, setCustomGenre] = useState<string>('');
 
+  const handleCustomGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomGenre(event.target.value);
+  };
+
+  const handleCustomGenreSubmit = () => {
+    if (customGenre.trim()) {
+      setState({ ...state, chosenGenre: customGenre, gameState: 'characterSelection' });
+    }
+  };
 
   return (
     <>
       <h2>Select a genre:</h2>
+      <div className="custom-genre-input">
+        <input
+          type="text"
+          placeholder="Enter custom genre"
+          value={customGenre}
+          onChange={handleCustomGenreChange}
+        />
+        <button onClick={handleCustomGenreSubmit}>Submit Custom Genre</button>
+      </div>
       <div className="genre-selection-container">
         {genres.map((genre, index) => (
           <button
@@ -20,7 +39,6 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
             onClick={() => {
               setState({ ...state, chosenGenre: genre, gameState: 'characterSelection' });
             }}
-            style={{ marginRight: index % 2 === 0 ? '0.5em' : '0', marginBottom: '0.5em' }}
           >
             {genre}
           </button>

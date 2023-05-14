@@ -32,6 +32,36 @@ button:hover {
   color: black;
 }
 
+.custom-genre-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em;
+  font-family: 'Courier New', Courier, monospace;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+}
+
+input[type="text"]::placeholder {
+  color: lime;
+}
+
+.custom-genre-input button {
+  width: 100%;
+}
+
+
+
 
 
 
