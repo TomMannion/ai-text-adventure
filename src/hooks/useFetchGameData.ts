@@ -10,13 +10,13 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
   useEffect(() => {
     const fetchGameWorldAndCharacterInfo = async () => {
       if (chosenCharacter !== '' && storyStart === '') {
-        const { characterTraits, characterBio, characterImage } = await fetchCharacterTraitsAndBio(chosenGenre, chosenCharacter, apiKey);
-        setState(prevState => ({ ...prevState, characterTraits, characterBio, characterImage }));
+        const { characterTraits, characterBio, characterImage, characterGender } = await fetchCharacterTraitsAndBio(chosenGenre, chosenCharacter, apiKey);
+        setState(prevState => ({ ...prevState, characterTraits, characterBio, characterImage, characterGender }));
 
         const loadingProgress = [characterTraits, characterBio, characterImage].filter(Boolean).length * 25;
         setLoadingProgress(loadingProgress);
 
-        const { storyStart, storySummary, options } = await fetchStartOfStory(chosenGenre, chosenCharacter, characterTraits, characterBio, apiKey);
+        const { storyStart, storySummary, options } = await fetchStartOfStory(chosenGenre, chosenCharacter, characterTraits, characterBio, characterGender, apiKey );
         setState(prevState => ({ ...prevState, storyStart, storySummary: [storySummary], options, isLoading: false, storyAndUserInputs: [storyStart] }));
         setLoadingProgress(100);
       }

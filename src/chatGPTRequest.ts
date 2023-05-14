@@ -9,7 +9,8 @@ const chatGPTRequest = async (prompt: string, apiKey: string): Promise<string[]>
 
   const body = {
       model: "gpt-3.5-turbo",
-      messages: [{role: "user", content: prompt}]
+      messages: [{role: "user", content: prompt}],
+      temperature: 1,
   };
 
   while (true) {

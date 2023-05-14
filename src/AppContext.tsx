@@ -10,6 +10,7 @@ type AppState = {
   chosenCharacter: string;
   characterTraits: string[];
   characterBio: string;
+  characterGender: string;
   characterImage: string;
   characterList: string;
   storyStart: string;
@@ -42,6 +43,7 @@ const AppContext = createContext<AppContextType>({
     chosenCharacter: '',
     characterTraits: [],
     characterBio: '',
+    characterGender: '',
     characterImage: '',
     characterList: '',
     storyStart: '',
@@ -75,6 +77,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     chosenCharacter: '',
     characterTraits: [],
     characterBio: '',
+    characterGender: '',
     characterImage: '',
     characterList: '',
     storyStart: '',

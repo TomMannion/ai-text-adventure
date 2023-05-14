@@ -1,33 +1,25 @@
-const lenientJsonParse = (json: string): any => {
+const lenientJsonParse = (json: string, error: string): any => {
+  let fixedJson = json;
+
   // Remove newlines and backslashes
-  const removedJson = json
+  fixedJson = fixedJson
     .replace(/\\n/g, '')
     .replace(/\\/g, '');
 
-  // Add double quotes around property names only if they don't have them
-  const quotedPropertyJson = removedJson.replace(/(\s*{?\s*)(?<!")(\w+)(?!")(\s*:)/g, '$1"$2"$4');
+  if (error.includes("Expected double-quoted property name")) {
+    // Add double quotes around property names only if they don't have them
+    fixedJson = fixedJson.replace(/(\s*{?\s*)(?<!")(\w+)(?!")(\s*:)/g, '$1"$2"$4');
+  }
 
-  // Remove trailing commas before closing braces or brackets
-  const cleanedJson = quotedPropertyJson.replace(/,\s*(}|])/g, '$1');
+  // Add other fixes based on the error message here
 
-  // Add missing closing double quotes in property values
-  const missingClosingQuoteJson = cleanedJson.replace(/:"([^"]*)[^"]([^"]{0,1}[,|\]|\}])/g, ':"$1"$2');
-
-  // Replace single quotes with double quotes within property values
-  const doubleQuotedJson = missingClosingQuoteJson.replace(/:('[^']*')/g, (match, p1) => `:"${p1.slice(1, -1).replace(/"/g, '\\"')}"`);
-
-  // Escape unescaped double quotes within property values
-  const escapedDoubleQuotesJson = doubleQuotedJson.replace(/:("[^"]*")/g, (match, p1) => {
-    const escapedValue = p1.slice(1, -1).split('').reduce((acc: string, char: string, idx: number, arr: string[]) => {
-      if (char === '"' && (idx === 0 || arr[idx - 1] !== '\\')) {
-        return acc + '\\"';
-      }
-      return acc + char;
-    }, '');
-    return `:"${escapedValue}"`;
-  });
-
-  return JSON.parse(escapedDoubleQuotesJson);
+  try {
+    return JSON.parse(fixedJson);
+  } catch (e) {
+    const castedError = e as Error;
+    console.error('Error parsing JSON with lenientJsonParse:', castedError);
+    return { error: castedError.message };
+  }
 };
 
 export default lenientJsonParse;

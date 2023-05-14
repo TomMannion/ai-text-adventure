@@ -4,6 +4,7 @@ import processJson from "../utils/processJson";
 
 interface CharacterData {
   characterTraits: string[];
+  characterGender: string;
   characterBio: string;
   characterFacialFeatures: string[];
 }
@@ -13,18 +14,24 @@ const fetchCharacterTraitsAndBio = async (
   chosenCharacter: string,
   apiKey: string
 ) => {
-  const maxWords = 50;
+  const maxWords = 70;
   const characterTraitsAndBioPrompt = `
-  Based on the text-adventure genre: "${chosenGenre}", and the main character you are playing: "${chosenCharacter}", please provide a list of 5 character personality traits in "characterTraits". These traits should be a creative mix of good and bad qualities, and consider a wide range of personalities from adventurous to mundane. For "characterBio", craft a short bio in no more than ${maxWords} words that showcases the character's unique background, experiences, and motivations, think outside of just the regular clichés for the genre. The bio should include elements from both exciting and ordinary life aspects but should not mention any specific locations or plans for the future.
-  Please also list some key visual features of the characters face in "characterFacialFeatures", such as eye color, hair color, and any other distinguishing features.
-Strictly only outputting a JSON object with the following format:
+  Construct a detailed character profile for a text-adventure game based on the genre '${chosenGenre}' and the main character '${chosenCharacter}'. Include these three components:
 
-{
-  characterTraits: ["trait1", "trait2", "trait3", "trait4", "trait5"],
-  characterBio: "character bio",
-  characterFacialFeatures: ["feature1", "feature2", "feature3", "feature4", "feature5"]
-}
-
+  1. Five personality traits that display a mix of good and bad qualities. Consider various personalities from adventurous to mundane.
+  2. a gender for the character, male, female, or non-binary.
+  3. A short bio (up to ${maxWords} words) emphasizing the character's unique skills, abilities. Incorporate 2-4 abilities or skills, which may be exceptional talents, learned skills, or supernatural powers, depending on the genre. Avoid clichés by thinking of less commonly used tropes in the genre and include both exciting and ordinary life aspects. Don't mention specific locations or future plans.
+  4. Key visual facial features of the characters face, such as eye color, hair color, skin color, or other distinguishing or interesting features.
+  
+  Output a JSON object in this format:
+  
+  {
+    "characterTraits": ["trait1", "trait2", "trait3", "trait4", "trait5"],
+    "gender": "male, female or non-binary",
+    "characterBio": "character bio",
+    "characterFacialFeatures": ["feature1", "feature2", "feature3", "feature4", "feature5", ...]
+  }
+  
 `;
 
   const fetchedCharacterTraitsAndBio = await chatGPTRequest(
@@ -41,6 +48,7 @@ Strictly only outputting a JSON object with the following format:
     chosenGenre,
     chosenCharacter,
     characterData.characterFacialFeatures,
+    characterData.characterGender,
     apiKey
   );
 
@@ -48,6 +56,7 @@ Strictly only outputting a JSON object with the following format:
     characterTraits: characterData.characterTraits,
     characterBio: characterData.characterBio,
     characterImage: characterImage,
+    characterGender: characterData.characterGender,
   };
 };
 
