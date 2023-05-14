@@ -18,16 +18,17 @@ interface GameOutputProps {
 }
 
 const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoading, options, handleOptionsClick }) => {
-  
-  const bottomRef = useRef<HTMLDivElement>(null);
-
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the bottom element smoothly
+    if (contentRef.current) {
+      contentRef.current.scrollTo({
+        top: contentRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [output, isLoading]); // Add isLoading dependency to the effect
-  
+  }, [output, isLoading]);
+
   console.log('GameOutput output:', output);
   return (
     <div className="game-output component-container">
@@ -35,7 +36,7 @@ const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoa
         <p>Genre: {genre}</p>
         <p>Turns: {turnCount}</p>
       </div>
-      <div className="game-output-content">
+      <div className="game-output-content" ref={contentRef}>
         {output.map((text, index) => (
           <div key={index}>
             <p>{text + '\n'}</p>
@@ -49,13 +50,8 @@ const GameOutput: React.FC<GameOutputProps> = ({ output, genre, turnCount, isLoa
         ))}
       </div>
       <LoadingOverlay show={isLoading} />
-      <div ref={bottomRef}></div> {/* Add the bottom element with the ref */}
     </div>
   );
 };
 
 export default GameOutput;
-
-
-
-
