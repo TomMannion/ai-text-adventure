@@ -19,6 +19,7 @@
   background-color: black;
   padding: 0.5rem 1rem;
   box-sizing: border-box;
+  font-weight: bold;
   z-index: 10;
   flex-wrap: wrap; /* Added flex-wrap */
 }

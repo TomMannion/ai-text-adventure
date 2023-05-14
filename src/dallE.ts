@@ -22,7 +22,7 @@ const dallERequest = async (chosenGenre: string, chosenCharacter: string, charac
   `;
 
   const prompt2 = `
-  High-Resolution pixel art of a ${characterGender} character from the genre ${chosenGenre} as a profile picture. close up of the face. the character has ${characterFacialFeatures.join(', ')}.
+  High-Resolution pixel art of a ${characterGender} character from the genre ${chosenGenre} as a profile picture. close up of the face. the character has ${characterFacialFeatures.join(', ')}. style of Street Fighter II 1991.
   `
 
   const body = {
