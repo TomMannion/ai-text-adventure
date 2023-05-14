@@ -18,7 +18,8 @@ const fetchStartOfStory = async (
 ): Promise<StartOfStory> => {
   const prompt3 = `
   Please read the following instructions carefully before proceeding:
-  In the text-based adventure game, the user plays as the main character, ${chosenCharacter}, their gender is: ${characterGender}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}". Craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
+  In the text-based adventure game, the user plays as the main character, ${chosenCharacter}, their gender is: ${characterGender}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}".
+  Craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
 
   - Avoiding clichés by starting with a unique and interesting scene often a lesser-known location in the genre
   - Creating a unique and interesting setting

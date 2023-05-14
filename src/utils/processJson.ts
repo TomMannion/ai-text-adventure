@@ -14,6 +14,11 @@ const processJson = <T>(response: string): T => {
     responseObject = lenientJsonParse(response, castedError.message);
   }
 
+  // If lenientJsonParse also fails, throw an error
+  if ('error' in responseObject) {
+    throw new Error('Both standard JSON parsing and lenientJsonParse failed');
+  }
+
   // Extract and process the data based on the provided type T
   const processedData: T = responseObject;
 

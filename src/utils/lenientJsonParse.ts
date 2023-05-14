@@ -5,9 +5,15 @@ const lenientJsonParse = (json: string, error: string): any => {
     // Add double quotes around property names only if they don't have them
     fixedJson = fixedJson.replace(/(\s*{?\s*)(?<!")(\w+)(?!")(\s*:)/g, '$1"$2"$4');
   }
-
+  
+  if (error.includes("Unexpected non-whitespace character after JSON")) {
+    // Remove newline characters
+    fixedJson = fixedJson.replace(/\\n|\n/g, '');
+  }
   // Remove trailing commas before closing braces or brackets
   fixedJson = fixedJson.replace(/,\s*(}|])/g, '$1');
+
+
 
   // Add other fixes based on the error message here
 

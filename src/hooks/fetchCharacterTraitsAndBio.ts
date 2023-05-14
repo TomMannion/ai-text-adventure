@@ -20,7 +20,7 @@ const fetchCharacterTraitsAndBio = async (
 
   1. Five personality traits that display a mix of good and bad qualities. Consider various personalities from adventurous to mundane.
   2. a gender for the character, male, female, or non-binary.
-  3. A short bio (up to ${maxWords} words) emphasizing the character's unique skills, abilities. Incorporate 2-4 abilities or skills, which may be exceptional talents, learned skills, or supernatural powers, depending on the genre. Avoid clichés by thinking of less commonly used tropes in the genre and include both exciting and ordinary life aspects. Don't mention specific locations or future plans.
+  3. A short bio (up to ${maxWords} words) emphasizing the character's unique skills and abilities. Incorporate 2-4 abilities or skills, which may be exceptional talents, learned skills, or supernatural powers, depending on the genre. Avoid clichés by thinking of less commonly used character descriptions in the genre. Don't mention specific locations or future plans.
   4. Key visual facial features of the characters face, such as eye color, hair color, skin color, or other distinguishing or interesting features.
   
   Output a JSON object in this format:
