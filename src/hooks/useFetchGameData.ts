@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react';
 import { AppContext } from '../AppContext';
 import fetchCharacterTraitsAndBio from './fetchCharacterTraitsAndBio';
-import fetchStartOfStory from './fetchStartOfStory';
+import { fetchStoryStart, fetchStorySummary } from './fetchStartOfStory';
 
 const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
   const { state, setState } = useContext(AppContext);
@@ -16,7 +16,9 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
         const loadingProgress = [characterTraits, characterBio, characterImage].filter(Boolean).length * 25;
         setLoadingProgress(loadingProgress);
 
-        const { storyStart, storySummary, options } = await fetchStartOfStory(chosenGenre, chosenCharacter, characterTraits, characterBio, characterGender, apiKey );
+        const { storyStart, options } = await fetchStoryStart(chosenGenre, chosenCharacter, characterTraits, characterBio, characterGender, apiKey );
+        const storySummary = await fetchStorySummary(storyStart, apiKey);
+        console.log('Story summary: ' + storySummary);
         setState(prevState => ({ ...prevState, storyStart, storySummary: [storySummary], options, isLoading: false, storyAndUserInputs: [storyStart] }));
         setLoadingProgress(100);
       }

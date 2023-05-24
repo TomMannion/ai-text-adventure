@@ -10,6 +10,7 @@ import CharacterSelectionContainer from './containers/CharacterSelectionContaine
 import useFetchGameData from './hooks/useFetchGameData';
 import { AppContext } from './AppContext';
 import useStoryProgress from './hooks/useStoryProgress';
+import DroneComponent from './components/DroneComponent';
 
 const App: React.FC = () => {
   const { state } = useContext(AppContext);
@@ -34,7 +35,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      {gameState === 'apiKeyInput' && <APIKeyInput />}
+      {gameState === 'apiKeyInput' && <div><APIKeyInput /></div>}
       {gameState === 'genreSelection' && <GenreSelectionContainer />}
       {gameState === 'characterSelection' && <CharacterSelectionContainer />}
       {gameState === 'loading' && <LoadingBar progress={loadingProgress} />}
