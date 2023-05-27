@@ -19,10 +19,31 @@ const fetchNextStoryPartAndOptions = async (
   apiKey: string,
 ): Promise<NextStoryPart> => {
 
+
+  // storySummary: string[],
+  // usersChoices: string[],
+
+  const formatStorySummary = (storySummary: string[]): string => {
+    let storySummaryFormatted = '';
+
+    for (let i = 0; i < storySummary.length; i++) {
+      if (i % 2 === 0) {
+        storySummaryFormatted += `${i / 2 + 1} Story Segment: "${storySummary[i]}" - `;
+      } else {
+        storySummaryFormatted += `User's Choice: "${storySummary[i]}"\n`;
+      }
+    }
+
+    return storySummaryFormatted;
+}
+
+
   const prompt1 = `
   Please read this entire prompt before starting the task.
-  You're still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with traits "${characterTraits.join('", "')}" and backstory "${characterBio}".
-  This is a summary of the previous segments and user's choices "${storySummary.slice(-16).join(' - ')}" read through this carefully as to no repeat senarios or options.
+  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with traits "${characterTraits.join('", "')}" and backstory "${characterBio}".
+  This is a summary of the previous segments and user's choices: 
+  ${formatStorySummary(storySummary.slice(-16))}
+  read through this carefully as to no repeat senarios or options.
   Given the previous paragraph "${previousParagraph}", the user's action "${input.text}". create the next segment of the story (65-200 words). Make sure the story:
   - Continues logically from what's happened so far including the summary of previous segments and user's choices
   - When addressing the main character refer to them as "you" or "your"
@@ -33,6 +54,8 @@ const fetchNextStoryPartAndOptions = async (
   - Develops characters and their relationships
   - Balances action, dialogue, and description
   - Reaches a climax and completes the story arc when appropriate
+
+  the user guides the story with their choices, so you must respect their choices even if they choose to make a bad decision.
 
   Now, Provide 3-5 game options that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure the options reflect the character's traits and backstory and offer opportunities for character development and exploration of genre themes.
 
