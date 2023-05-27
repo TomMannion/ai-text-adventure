@@ -1,7 +1,7 @@
 // src/hooks/useStoryProgress.ts
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
-import fetchNextStoryPart from './fetchNextStoryPart';
+import { fetchNextStoryPartAndOptions, fetchStorySummary } from './fetchNextStoryPart';
 
 interface Option {
   text: string;
@@ -14,15 +14,15 @@ const useStoryProgress = () => {
 
   const handleUserInput = async (option: Option) => {
     setState(prevState => ({ ...prevState, isLoading: true, input: option.text }));
+
+    // Fetch the next story part and options
     const { 
       storySegment, 
-      newStorySummary,
-      storyStatus, 
       options,
-    } = await fetchNextStoryPart(
+    } = await fetchNextStoryPartAndOptions(
       storySummary,
       previousParagraph,
-      option, // Use option.text here
+      option,
       chosenCharacter,
       chosenGenre,
       characterTraits,
@@ -31,12 +31,21 @@ const useStoryProgress = () => {
       apiKey,
     );
 
+    // Fetch the story summary
+    const { 
+      newStorySummary,
+      storyStatus, 
+    } = await fetchStorySummary(
+      storySegment,
+      apiKey,
+    );
+
     const optionFormatted = option.text;
 
     setState(prevState => ({
       ...prevState,
-      storySummary: [...prevState.storySummary, optionFormatted, newStorySummary], // Use option.text here
-      storyAndUserInputs: [...prevState.storyAndUserInputs, option.text, storySegment], // Use option.text here
+      storySummary: [...prevState.storySummary, optionFormatted, newStorySummary],
+      storyAndUserInputs: [...prevState.storyAndUserInputs, option.text, storySegment],
       storyStatus, turnCount: prevState.turnCount + 1,
       previousParagraph: storySegment,
       options,

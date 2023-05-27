@@ -4,11 +4,10 @@ import filterOptionsNew from '../utils/filterOptionsNew';
 
 interface StartOfStory {
   storyStart: string;
-  storySummary: string;
   options: { [key: string]: { text: string; risk: string } };
 }
 
-const fetchStartOfStory = async (
+const fetchStoryStart = async (
   chosenGenre: string,
   chosenCharacter: string,
   characterTraits: string[],
@@ -16,66 +15,37 @@ const fetchStartOfStory = async (
   characterGender: string,
   apiKey: string
 ): Promise<StartOfStory> => {
-  const prompt3 = `
+  const prompt1 = `
   Please read the following instructions carefully before proceeding:
-  In the text-based adventure game, the user plays as the main character, ${chosenCharacter}, their gender is: ${characterGender}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}".
-  Craft an engaging and compelling opening paragraph or scene (65-200 words) that sets the stage for the adventure and instantly grabs the reader's attention. Focus on:
+  You're an AI writing a text-based adventure game. The protagonist is ${chosenCharacter}, who is ${characterGender}, with these traits: "${characterTraits.join('", "')}" and this backstory: "${characterBio}".
+  The genre of our game is ${chosenGenre}. First, Craft a compelling opening scene (65-200 words) that starts the adventure. Make sure to:
+  - When addressing the main character refer to them as "you" or "your"
+  - Choose a unique and lesser-known setting within the genre
+  - Use vivid language to write engaging sentences
+  - Build suspense and tension
+  - Introduce choices that have real consequences
+  - Present relationships between characters
+  - Balance action, dialogue, and description
+  - Surprise the reader with twists and subverted expectations
+  - Set the mood and atmosphere of the scene
 
-  - Avoiding clichés by starting with a unique and interesting scene often a lesser-known location in the genre
-  - Creating a unique and interesting setting
-  - Writing captivating sentences
-  - Using vivid language and sensory details
-  - Building tension and suspense
-  - Introducing meaningful choices and consequences
-  - Presenting interesting characters and relationships
-  - Balancing action, dialogue, and description
-  - Incorporating twists, surprises, and subverted expectations
-  - Creating a strong sense of atmosphere and mood
-  - Incorporating the character's traits and background to enrich the scene
+  Second, create 3 to 5 game options that continue the story. Each option (10-30 words) should allow the player to explore the scene or interact with characters. Make sure each option fits the game's setting, leads to different story paths, and includes a risk level (low, medium, high). Include a "risky" option if possible.
 
-Based on the story segment, provide the user with 3 to 5 options in "options" that naturally follow the current part of the story, offering opportunities for them to interact with the scene, explore the options, or engage in character interactions. Ensure that each option is meaningful, consistent with the game's setting and character details, and leads to diverse story paths. Include an additional "risky" action in the list when possible. Depending on the number of options provided (3 to 5), adjust the option keys accordingly.
-
-Provide a comprehensive summary of the opening story segment to be created (max 45 words) in "storySummary" that precisely captures all crucial details from the current story segment, serving as a reference to build the next paragraph without expanding the story beyond the current segment. Ensure that the summary includes:
-
-  - A detailed breakdown of character interactions, including actions, dialogues, emotions, and reactions
-  - The exact locations of all characters, specifying their positions and any changes in location during the segment
-  - The current inventory of items for each character, including the acquisition, usage, or loss of items
-  - Any changes in the relationships between characters, such as alliances, conflicts, or other significant interactions
-  - Key events, decisions, or discoveries that impact the direction of the story or the characters' motivations
-  - Any other vital information required for maintaining continuity and consistency in the unfolding narrative
-
-Strictly only output a JSON object with the following format:
-
-{
-  "storyStart": "{opening paragraph or scene, 65-200 words}",
-  "storySummary": "{summary, max 45 words}",
-  "options": {
-    "option1": { 
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option2": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option3": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option4": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option5": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-      }
+  Strictly put your responses in this JSON format:
+  {
+    "storyStart": "{opening paragraph or scene, 65-200 words}",
+    "options": {
+      "option1": { 
+        "text": "{option text, 10-30 words}",
+        "risk": "{risk level, low, medium, high}",
+      },
+      // ... up to option5 in the same format
     }
   }
 
   `
 
-  const response = await chatGPTRequest(prompt3, apiKey);
+  const response = await chatGPTRequest(prompt1, apiKey);
   const responseObject: StartOfStory = processJson<StartOfStory>(response[0]);
 
   // Filter options
@@ -85,7 +55,34 @@ Strictly only output a JSON object with the following format:
   return responseObject;
 };
 
-export default fetchStartOfStory;
+const fetchStorySummary = async (
+  storyStart: string,
+  apiKey: string
+): Promise<string> => {
+  const prompt2 = `
+  Given the following story start: "${storyStart}", write a concise summary of the opening story segment in one paragraph.The summary should include:
+- A summary of character interactions (actions, dialogues, emotions, reactions)
+- Exact locations of characters and changes in location
+- Current inventory of each character (acquisition, usage, or loss of items)
+- Changes in character relationships (alliances, conflicts, interactions)
+- Key events or discoveries that affect the story or characters
+- Any other important details for narrative consistency and continuity
+
+Strictly put your responses in this JSON format:
+{
+  "newStorySummary": "{summary of story segment}",
+}
+
+`
+
+  const response = await chatGPTRequest(prompt2, apiKey);
+  const responseObject = processJson<{ newStorySummary: string }>(response[0]);
+
+  return responseObject.newStorySummary;
+};
+
+export { fetchStoryStart, fetchStorySummary };
+
 
 
 

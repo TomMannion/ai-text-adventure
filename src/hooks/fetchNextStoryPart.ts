@@ -4,15 +4,13 @@ import filterOptionsNew from '../utils/filterOptionsNew';
 
 interface NextStoryPart {
   storySegment: string;
-  newStorySummary: string;
-  storyStatus: string;
   options: { [key: string]: { text: string; risk: string } };
 }
 
-const fetchNextStoryPart = async (
+const fetchNextStoryPartAndOptions = async (
   storySummary: string[],
   previousParagraph: string,
-  input: { text: string; risk: string }, // Update the type of the function parameter
+  input: { text: string; risk: string },
   chosenCharacter: string,
   chosenGenre: string,
   characterTraits: string[],
@@ -21,147 +19,70 @@ const fetchNextStoryPart = async (
   apiKey: string,
 ): Promise<NextStoryPart> => {
 
-  const prompt = `
-  In the text-based adventure game, the user plays as the main character: "${chosenCharacter}", their gender is: ${characterGender}, in the text-adventure genre: ${chosenGenre}, with character traits: "${characterTraits.join('", "')}" and character bio: "${characterBio}".
-  Your task is to craft an interesting next story segment (65-200 words) that follows the narrative established by the previous paragraph: "${previousParagraph}". Take into consideration the user's action based on the previous paragraph: "${input.text}", and the summary of previous segments and user's choices: "${storySummary.slice(-16).join(' - ')}". Focus on the following aspects:
 
-  high (death chance +7%, max 80%), medium, low.
-  - Punishment/reward chances based on risk: high (67%/33%), medium (47%/53%), low (25%/75%)
-  - Maintaining consistency with the story so far
-  - Avoiding clichés by utilizing lesser-known things in the genre
-  - Provide detailed descriptions, especially for creatures or entities; give them a name or a vivid, varied description if not already mentioned, to prevent repetitiveness
-  - try to not repeat similar story segments, try to make each segment unique and interesting
-  - Weight up the users previous choices and segments and current choice based on the previous paragraph, if you deem the user's choice as risky it is your choice to punish (punishment can include death) them or give them a reward
-  - Building tension and suspense
-  - Developing meaningful choices and consequences
-  - Expanding on interesting characters and relationships
-  - Balancing action, dialogue, and description
-  - Evaluating the summary of the previous segments and choices you should look for moments you can climax and complete the story arc when you deem it appropriate or kill off the character if you deem it appropriate.
-  - the next segement should not contain the previous paragraph
-  
-  Based on the story segment, provide the user with 3 to 5 options in "options" that focus on:
-  - Creating engaging, detailed, unique and interesting options
-  - Avoiding clichés
-  - Naturally following the current part of the story
-  - has a mixture of positive and negative options
-  - has a mixture of risky and safe options, giving the user room to gamble and take risks or not
-  - Offering opportunities for them to interact with the scene
-  - Ensure that each option is meaningful, consistent with the game's setting
-  - leads to diverse story paths
-  
-  Provide a comprehensive summary of the new story segment to be created (max 45 words) in "newStorySummary" that precisely captures all crucial details from the segment, serving as a reference to build the next paragraph without expanding the story beyond the current segment. Ensure that the summary includes:
+  // storySummary: string[],
+  // usersChoices: string[],
 
-  - A detailed breakdown of character interactions, including actions, dialogues, emotions, relationships, and reactions
-  - The exact locations of all characters, specifying their positions and any changes in location during the segment
-  - The current inventory of items for each character, including the acquisition, usage, or loss of items
-  - Any changes in the relationships between characters, such as alliances, conflicts, or other significant interactions
-  - Key events, decisions, or discoveries that impact the direction of the story or the characters' motivations
-  - Any other vital information required for maintaining continuity and consistency in the unfolding narrative
- 
-  Strictly use "storySegment", "newStorySummary", and "options" variables in the JSON object.
+  const formatStorySummary = (storySummary: string[]): string => {
+    let storySummaryFormatted = '';
 
-  Strictly only output a JSON object with the following format:
-  
-  {
-    {
-      "storyStart": "{opening paragraph or scene, 65-200 words}",
-      "storySummary": "{summary, max 45 words}",
-      "options": {
-        "option1": { 
-          "text": "{option text, 10-30 words}",
-          "risk": "{risk level, low, medium, high}",
-        },
-        "option2": {
-          "text": "{option text, 10-30 words}",
-          "risk": "{risk level, low, medium, high}",
-        },
-        "option3": {
-          "text": "{option text, 10-30 words}",
-          "risk": "{risk level, low, medium, high}",
-        },
-        option4: {
-          text: "{option text, 10-30 words}",
-          risk: "{risk level, low, medium, high}",
-        },
-        option5: {
-          "text": "{option text, 10-30 words}",
-          "risk": "{risk level, low, medium, high}",
-        }
+    for (let i = 0; i < storySummary.length; i++) {
+      if (i % 2 === 0) {
+        storySummaryFormatted += `${i / 2 + 1} Story Segment: "${storySummary[i]}" - `;
+      } else {
+        storySummaryFormatted += `User's Choice: "${storySummary[i]}"\n`;
       }
     }
 
-  `
-
-const prompt2 = `
-Please read this entire prompt before starting the task.
-Create a story segment (65-200 words) for a text-based adventure game with the main character "${chosenCharacter}" in the genre "${chosenGenre}". Use the character traits "${characterTraits.join('", "')}", character bio "${characterBio}", the previous paragraph "${previousParagraph}", and the user's action "${input.text}". Consider the summary of previous segments and user's choices "${storySummary.slice(-16).join(' - ')}". Focus on:
-
-- Consistency with the story so far
-- Avoiding clichés
-- Detailed descriptions
-- Unique and interesting segments
-- User's previous choices and segments
-- Tension and suspense
-- Meaningful choices and consequences
-- Character and relationship development
-- Balancing action, dialogue, and description
-- Climax and story arc completion when appropriate
-
-Provide 3-5 options in "options" that are engaging, detailed, unique, and interesting. Ensure the options follow the story naturally and link the user's choices to the story's progression and the character's actions. Reflect the character's traits and bio, and offer opportunities for character development and exploration of the genre's themes.
-
-Create a summary (max 45 words) in "newStorySummary" of the current story segment. Include:
-
-- Character interactions (actions, dialogues, emotions, reactions)
-- Character locations and position changes
-- Character inventory (acquisition, usage, or loss of items)
-- Relationship changes (alliances, conflicts, etc.)
-- Key events, decisions, or discoveries
-- Other vital information for continuity and consistency
-
-Strictly only output a JSON object with the following format:
-
-{
-  "storySegment": "{opening paragraph or scene, 65-200 words}",
-  "newStorySummary": "{summary, max 45 words}",
-  "options": {
-    "option1": { 
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option2": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option3": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option4": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    },
-    "option5": {
-      "text": "{option text, 10-30 words}",
-      "risk": "{risk level, low, medium, high}",
-    }
-  }
+    return storySummaryFormatted;
 }
 
-`;
 
-console.log("storySummary: " + storySummary.slice(-16).join(' - '))
+  const prompt1 = `
+  Please read this entire prompt before starting the task.
+  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with traits "${characterTraits.join('", "')}" and backstory "${characterBio}".
+  This is a summary of the previous segments and user's choices: 
+  ${formatStorySummary(storySummary.slice(-16))}
+  read through this carefully as to no repeat senarios or options.
+  Given the previous paragraph "${previousParagraph}", the user's action "${input.text}". create the next segment of the story (65-200 words). Make sure the story:
+  - Continues logically from what's happened so far including the summary of previous segments and user's choices
+  - When addressing the main character refer to them as "you" or "your"
+  - Is unique and avoids clichés
+  - Has detailed descriptions
+  - Builds tension and suspense
+  - Incorporates meaningful choices and consequences
+  - Develops characters and their relationships
+  - Balances action, dialogue, and description
+  - Reaches a climax and completes the story arc when appropriate
+
+  the user guides the story with their choices, so you must respect their choices even if they choose to make a bad decision.
+
+  Now, Provide 3-5 game options that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure the options reflect the character's traits and backstory and offer opportunities for character development and exploration of genre themes.
+
+  Strictly put your responses in this JSON format:
+  {
+    "storySegment": "{opening paragraph or scene, 65-200 words}",
+    "options": {
+      "option1": { 
+        "text": "{option text, 10-30 words}",
+        "risk": "{risk level, low, medium, high}",
+      },
+      // ... up to option5 in the same format
+    }
+  }
+
+  `;
+
   let response;
   let responseObject: NextStoryPart = {
     storySegment: '',
-    newStorySummary: '',
-    storyStatus: '',
     options: {},
   };
   let success = false;
 
   while (!success) {
     try {
-      response = await chatGPTRequest(prompt2, apiKey);
+      response = await chatGPTRequest(prompt1, apiKey);
       responseObject = processJson<NextStoryPart>(response[0]);
 
       // Filter options
@@ -178,4 +99,55 @@ console.log("storySummary: " + storySummary.slice(-16).join(' - '))
   return responseObject;
 };
 
-export default fetchNextStoryPart;
+interface StorySummary {
+  newStorySummary: string;
+  storyStatus: string;
+}
+
+const fetchStorySummary = async (
+  storySegment: string,
+  apiKey: string,
+): Promise<StorySummary> => {
+
+  const prompt2 = `
+  Write a concise summary of this story segment "${storySegment}" in one paragraph. The summary should include:
+  - Character interactions (actions, dialogues, emotions, reactions)
+  - Exact locations of characters and changes in location
+  - Current inventory of each character (acquisition, usage, or loss of items)
+  - Changes in character relationships (alliances, conflicts, interactions)
+  - Key events or discoveries that affect the story or characters
+  - Any other important details for narrative consistency and continuity
+
+  also, provide the status of the story (ongoing, completed or died).
+
+  Strictly put your responses in this JSON format:
+  {
+    "storySummary": "{summary of the story segment}",
+    "storyStatus": "{status of the story, e.g., ongoing, completed}"
+  }
+  `;
+
+  let response;
+  let responseObject: StorySummary = {
+    newStorySummary: '',
+    storyStatus: '',
+  };
+  let success = false;
+
+  while (!success) {
+    try {
+      response = await chatGPTRequest(prompt2, apiKey);
+      responseObject = processJson<StorySummary>(response[0]);
+
+      console.log('responseObject', responseObject);
+      success = true;
+    } catch (error) {
+      console.error('Error processing response, retrying request...', error);
+    }
+  }
+
+  return responseObject;
+};
+
+export { fetchNextStoryPartAndOptions, fetchStorySummary };
+
