@@ -15,9 +15,11 @@ const CharacterInfo: React.FC<CharacterInfoProps> = ({ characterName, characterT
     setShowDetails(!showDetails);
   };
 
+  
+
   return (
     <div className={`character-info${showDetails ? " open" : ""} component-container`}>
-      <img src={characterImage} alt={characterName} className="character-image" />
+      <img src={characterImage} alt={characterName}  className='character-image'/>
       <h3>{characterName}</h3>
       <button onClick={toggleDetails}>{showDetails ? "Hide Details" : "Show Details"}</button>
       <div className="character-details">

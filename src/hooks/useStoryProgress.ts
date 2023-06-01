@@ -2,6 +2,7 @@
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import { fetchNextStoryPartAndOptions, fetchStorySummary } from './fetchNextStoryPart';
+import { saveStoryToDB } from '../helpers/indexedDB';
 
 interface Option {
   text: string;
@@ -51,6 +52,13 @@ const useStoryProgress = () => {
       options,
       isLoading: false,
     }));
+
+    try {
+      await saveStoryToDB(state);
+    } catch (error) {
+      console.error('Failed to save game:', error);
+    }
+      
 
     if (storyStatus === 'completed' || storyStatus === 'died') {
       await new Promise(resolve => setTimeout(resolve, 5000));

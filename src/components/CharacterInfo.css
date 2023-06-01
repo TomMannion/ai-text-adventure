@@ -31,8 +31,8 @@
   left: 0;
   margin: 0.5em; /* Add margin to create spacing */
   border-radius: 20%;
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   /* margin-left: 2em; */
   border: 2px solid lime;
@@ -86,7 +86,7 @@ button:hover {
 
 .traits-container {
   flex: 0 1 auto;
-  min-width: max-content;
+  min-width: 100%;
   text-align: left;
 }
 

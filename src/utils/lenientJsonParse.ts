@@ -1,21 +1,22 @@
-const lenientJsonParse = (json: string, error: string): any => {
+const lenientJsonParse = (json: string): any => {
   let fixedJson = json;
 
-  if (error.includes("Expected double-quoted property name")) {
-    // Add double quotes around property names only if they don't have them
-    fixedJson = fixedJson.replace(/(\s*{?\s*)(?<!")(\w+)(?!")(\s*:)/g, '$1"$2"$4');
-  }
-  
-  if (error.includes("Unexpected non-whitespace character after JSON")) {
-    // Remove newline characters
-    fixedJson = fixedJson.replace(/\\n|\n/g, '');
-  }
+  // Add double quotes around property names only if they don't have them
+  fixedJson = fixedJson.replace(/(\s*{?\s*)(?<!")(\w+)(?!")(\s*:)/g, '$1"$2"$3');
+
   // Remove trailing commas before closing braces or brackets
   fixedJson = fixedJson.replace(/,\s*(}|])/g, '$1');
 
+  // Ensuring that every opening bracket ({ or [) has a corresponding closing bracket (} or ])
+  const curlyBrackets = Array.from(fixedJson.matchAll(/[{}]/g)).map(m => m[0]);
+  const squareBrackets = Array.from(fixedJson.matchAll(/[\[\]]/g)).map(m => m[0]);
+  
 
-
-  // Add other fixes based on the error message here
+  if (curlyBrackets.filter(x => x === '{').length !== curlyBrackets.filter(x => x === '}').length
+      || squareBrackets.filter(x => x === '[').length !== squareBrackets.filter(x => x === ']').length) {
+    console.error('Unbalanced brackets in JSON');
+    return { error: 'Unbalanced brackets in JSON' };
+  }
 
   try {
     return JSON.parse(fixedJson);
@@ -27,3 +28,4 @@ const lenientJsonParse = (json: string, error: string): any => {
 };
 
 export default lenientJsonParse;
+

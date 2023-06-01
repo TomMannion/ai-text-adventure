@@ -17,10 +17,10 @@ const fetchStoryStart = async (
 ): Promise<StartOfStory> => {
   const prompt1 = `
   Please read the following instructions carefully before proceeding:
-  You're an AI writing a text-based adventure game. The protagonist is ${chosenCharacter}, who is ${characterGender}, with these traits: "${characterTraits.join('", "')}" and this backstory: "${characterBio}".
+  You're an AI writing a text-based adventure game. The protagonist is ${chosenCharacter}, who is ${characterGender}, with these quirks: "${characterTraits.join('", "')}" and this backstory: "${characterBio}".
   The genre of our game is ${chosenGenre}. First, Craft a compelling opening scene (65-200 words) that starts the adventure. Make sure to:
   - When addressing the main character refer to them as "you" or "your"
-  - Choose a unique and lesser-known setting within the genre
+  - Choose a unique and lesser-known setting within the genre.
   - Use vivid language to write engaging sentences
   - Build suspense and tension
   - Introduce choices that have real consequences
@@ -28,8 +28,11 @@ const fetchStoryStart = async (
   - Balance action, dialogue, and description
   - Surprise the reader with twists and subverted expectations
   - Set the mood and atmosphere of the scene
+  - Avoid clichés and overused tropes
+  - Only incorporate characters quirks and backstory if they fit the current scene
 
   Second, create 3 to 5 game options that continue the story. Each option (10-30 words) should allow the player to explore the scene or interact with characters. Make sure each option fits the game's setting, leads to different story paths, and includes a risk level (low, medium, high). Include a "risky" option if possible.
+  Try to make options specific and unique to the current scene, also avoid common tropes for creating options.
 
   Strictly put your responses in this JSON format:
   {

@@ -11,7 +11,7 @@ const processJson = <T>(response: string): T => {
     console.error('Error parsing JSON response:', castedError);
 
     // Use lenientJsonParse if standard JSON parsing fails
-    responseObject = lenientJsonParse(response, castedError.message);
+    responseObject = lenientJsonParse(response);
   }
 
   // If lenientJsonParse also fails, throw an error

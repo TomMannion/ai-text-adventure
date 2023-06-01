@@ -1,8 +1,9 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-type GameState = 'apiKeyInput' | 'playing' | 'characterSelection' | 'loading' | 'genreSelection';
+type GameState = 'apiKeyInput' | 'playing' | 'characterSelection' | 'loading' | 'genreSelection' | 'loadOrCreate';
 
 type AppState = {
+  id: number;
   gameState: GameState;
   genres: string[];
   characters: object;
@@ -36,6 +37,7 @@ type AppContextType = {
 
 const AppContext = createContext<AppContextType>({
   state: {
+    id: -1,
     gameState: 'apiKeyInput',
     genres: [],
     characters: {},
@@ -70,6 +72,7 @@ export type AppProviderProps = {
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, setState] = useState<AppState>({
+    id: -1,
     gameState: 'apiKeyInput',
     genres: [],
     characters: {},
