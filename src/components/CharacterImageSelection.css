@@ -1,0 +1,53 @@
+.character-image-selection-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Align buttons at the start */
+  gap: 10px; /* Space between buttons */
+  padding: 10px;
+  border: 1px solid lime;
+  margin: 0 auto;
+  width: 100%; /* Ensure the container fills its parent's width */
+  height: 100vh;
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+  overflow-x: auto;
+}
+
+
+.image-submit {
+  background-color: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  transition: background-color 0.3s, color 0.3s;
+  width: 300px;
+  margin-bottom: 0.5em;
+}
+
+.character-image-button {
+  width: 160px;
+  height: 160px;
+  background-color: black;
+  border: 1px solid lime;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.character-image-button img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Keep image aspect ratio */
+}
+
+.character-image-button:hover, .character-button.selected {
+  background-color: lime;
+  color: black;
+}
+
+.character-button.selected {
+  border-color: black;
+}

@@ -13,7 +13,8 @@ const fetchStoryStart = async (
   characterTraits: string[],
   characterBio: string,
   characterGender: string,
-  apiKey: string
+  apiKey: string,
+  provider: string
 ): Promise<StartOfStory> => {
   const prompt1 = `
   Please read the following instructions carefully before proceeding:
@@ -29,7 +30,7 @@ const fetchStoryStart = async (
   - Surprise the reader with twists and subverted expectations
   - Set the mood and atmosphere of the scene
 
-  Second, create 3 to 5 game options that continue the story. Each option (10-30 words) should allow the player to explore the scene or interact with characters. Make sure each option fits the game's setting, leads to different story paths, and includes a risk level (low, medium, high). Include a "risky" option if possible.
+  Second, create 3 to 5 game options in the options key of the JSON that continue the story. Each option (10-30 words) should allow the player to explore the scene or interact with characters. Make sure each option fits the game's setting, leads to different story paths, and includes a risk level (low, medium, high). Include a "risky" option if possible.
 
   Strictly put your responses in this JSON format:
   {
@@ -45,7 +46,7 @@ const fetchStoryStart = async (
 
   `
 
-  const response = await chatGPTRequest(prompt1, apiKey);
+  const response = await chatGPTRequest(prompt1, apiKey, provider);
   const responseObject: StartOfStory = processJson<StartOfStory>(response[0]);
 
   // Filter options
@@ -57,7 +58,8 @@ const fetchStoryStart = async (
 
 const fetchStorySummary = async (
   storyStart: string,
-  apiKey: string
+  apiKey: string,
+  provider: string
 ): Promise<string> => {
   const prompt2 = `
   Given the following story start: "${storyStart}", write a concise summary of the opening story segment in one paragraph.The summary should include:
@@ -75,7 +77,7 @@ Strictly put your responses in this JSON format:
 
 `
 
-  const response = await chatGPTRequest(prompt2, apiKey);
+  const response = await chatGPTRequest(prompt2, apiKey, provider);
   const responseObject = processJson<{ newStorySummary: string }>(response[0]);
 
   return responseObject.newStorySummary;

@@ -16,7 +16,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
 
   const handleCustomGenreSubmit = () => {
     if (customGenre.trim()) {
-      setState({ ...state, chosenGenre: customGenre, gameState: 'characterSelection' });
+      setState({ ...state, chosenGenre: customGenre, gameState: 'characterImageSelection' });
     }
   };
 
@@ -37,7 +37,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
           <button
             key={genre}
             onClick={() => {
-              setState({ ...state, chosenGenre: genre, gameState: 'characterSelection' });
+              setState({ ...state, chosenGenre: genre, gameState: 'characterImageSelection' });
             }}
           >
             {genre}

@@ -17,11 +17,8 @@ const fetchNextStoryPartAndOptions = async (
   characterBio: string,
   characterGender: string,
   apiKey: string,
+  provider: string
 ): Promise<NextStoryPart> => {
-
-
-  // storySummary: string[],
-  // usersChoices: string[],
 
   const formatStorySummary = (storySummary: string[]): string => {
     let storySummaryFormatted = '';
@@ -57,7 +54,7 @@ const fetchNextStoryPartAndOptions = async (
 
   the user guides the story with their choices, so you must respect their choices even if they choose to make a bad decision.
 
-  Now, Provide 3-5 game options that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure the options reflect the character's traits and backstory and offer opportunities for character development and exploration of genre themes.
+  Now, Provide 3-5 game options in the options key of the JSON that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure the options reflect the character's traits and backstory and offer opportunities for character development and exploration of genre themes.
 
   Strictly put your responses in this JSON format:
   {
@@ -82,7 +79,7 @@ const fetchNextStoryPartAndOptions = async (
 
   while (!success) {
     try {
-      response = await chatGPTRequest(prompt1, apiKey);
+      response = await chatGPTRequest(prompt1, apiKey, provider);
       responseObject = processJson<NextStoryPart>(response[0]);
 
       // Filter options
@@ -107,6 +104,7 @@ interface StorySummary {
 const fetchStorySummary = async (
   storySegment: string,
   apiKey: string,
+  provider: string
 ): Promise<StorySummary> => {
 
   const prompt2 = `
@@ -136,7 +134,7 @@ const fetchStorySummary = async (
 
   while (!success) {
     try {
-      response = await chatGPTRequest(prompt2, apiKey);
+      response = await chatGPTRequest(prompt2, apiKey, provider);
       responseObject = processJson<StorySummary>(response[0]);
 
       console.log('responseObject', responseObject);

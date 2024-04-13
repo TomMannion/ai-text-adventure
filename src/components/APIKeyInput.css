@@ -22,7 +22,8 @@
   gap: 0.5em;
 }
 
-.api-input input {
+.api-input input,
+.api-input select { /* Apply the same styles to select as input */
   background-color: black;
   color: lime;
   border: 1px solid lime;

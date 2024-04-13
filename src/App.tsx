@@ -1,6 +1,7 @@
 // App.tsx
 import React, { useState, useContext } from 'react';
 import './App.css';
+import CharacterImageSelection from './components/CharacterImageSelection'
 import APIKeyInput from './components/APIKeyInput';
 import GameOutput from './components/GameOutput';
 import CharacterInfo from './components/CharacterInfo';
@@ -19,7 +20,7 @@ const App: React.FC = () => {
     chosenCharacter,
     characterTraits,
     characterBio,
-    characterImage,
+    chosenImage,
     options,
     gameState,
     storyAndUserInputs,
@@ -38,6 +39,7 @@ const App: React.FC = () => {
       {gameState === 'apiKeyInput' && <div><APIKeyInput /></div>}
       {gameState === 'genreSelection' && <GenreSelectionContainer />}
       {gameState === 'characterSelection' && <CharacterSelectionContainer />}
+      {gameState === 'characterImageSelection' && <div><CharacterImageSelection /></div>}
       {gameState === 'loading' && <LoadingBar progress={loadingProgress} />}
       {gameState === 'playing' && (
         <div className="playing-container">
@@ -56,7 +58,7 @@ const App: React.FC = () => {
             characterName={chosenCharacter}
             characterTraits={characterTraits}
             characterBio={characterBio}
-            characterImage={characterImage}
+            characterImage={chosenImage}
           />
         </div>
       )}

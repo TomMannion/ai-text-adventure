@@ -10,7 +10,7 @@ interface Option {
 
 const useStoryProgress = () => {
   const { state, setState } = useContext(AppContext);
-  const { storySummary, previousParagraph, chosenCharacter, chosenGenre, characterTraits, characterBio, characterGender, apiKey } = state;
+  const { storySummary, previousParagraph, chosenCharacter, chosenGenre, characterTraits, characterBio, characterGender, apiKey, provider } = state;
 
   const handleUserInput = async (option: Option) => {
     setState(prevState => ({ ...prevState, isLoading: true, input: option.text }));
@@ -29,6 +29,7 @@ const useStoryProgress = () => {
       characterBio,
       characterGender,
       apiKey,
+      provider
     );
 
     // Fetch the story summary
@@ -38,6 +39,7 @@ const useStoryProgress = () => {
     } = await fetchStorySummary(
       storySegment,
       apiKey,
+      provider
     );
 
     const optionFormatted = option.text;

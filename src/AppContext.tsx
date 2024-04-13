@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode } from 'react';
 
-type GameState = 'apiKeyInput' | 'playing' | 'characterSelection' | 'loading' | 'genreSelection';
+type GameState = 'apiKeyInput' | 'playing' | 'characterImageSelection' | 'characterSelection' | 'loading' | 'genreSelection';
 
 type AppState = {
   gameState: GameState;
@@ -11,7 +11,7 @@ type AppState = {
   characterTraits: string[];
   characterBio: string;
   characterGender: string;
-  characterImage: string;
+  chosenImage: string;
   characterList: string;
   storyStart: string;
   storySummary: string[];
@@ -23,6 +23,7 @@ type AppState = {
   turnCount: number;
   isLoading: boolean;
   apiKey: string;
+  provider: string;
   nextPartOfStory: string;
   previousParagraph: string;
   tempOptions: { [key: string]: string };
@@ -44,7 +45,7 @@ const AppContext = createContext<AppContextType>({
     characterTraits: [],
     characterBio: '',
     characterGender: '',
-    characterImage: '',
+    chosenImage: '',
     characterList: '',
     storyStart: '',
     storySummary: [],
@@ -56,6 +57,7 @@ const AppContext = createContext<AppContextType>({
     turnCount: 0,
     isLoading: false,
     apiKey: '',
+    provider: '',
     nextPartOfStory: '',
     previousParagraph: '',
     tempOptions: {},
@@ -78,7 +80,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     characterTraits: [],
     characterBio: '',
     characterGender: '',
-    characterImage: '',
+    chosenImage: '',
     characterList: '',
     storyStart: '',
     storySummary: [],
@@ -90,6 +92,7 @@ const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     turnCount: 0,
     isLoading: false,
     apiKey: '',
+    provider: '',
     nextPartOfStory: '',
     previousParagraph: '',
     tempOptions: {},

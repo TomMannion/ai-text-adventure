@@ -12,7 +12,9 @@ interface CharacterData {
 const fetchCharacterTraitsAndBio = async (
   chosenGenre: string,
   chosenCharacter: string,
-  apiKey: string
+  chosenImage: string,
+  apiKey: string,
+  provider: string
 ) => {
   const maxWords = 70;
   const characterTraitsAndBioPrompt = `
@@ -36,7 +38,8 @@ const fetchCharacterTraitsAndBio = async (
 
   const fetchedCharacterTraitsAndBio = await chatGPTRequest(
     characterTraitsAndBioPrompt,
-    apiKey
+    apiKey,
+    provider
   );
   const characterData: CharacterData = processJson<CharacterData>(
     fetchedCharacterTraitsAndBio[0]
@@ -44,18 +47,18 @@ const fetchCharacterTraitsAndBio = async (
 
   console.log("Fetched characterData:", characterData);
 
-  const characterImage = await dallERequest(
-    chosenGenre,
-    chosenCharacter,
-    characterData.characterFacialFeatures,
-    characterData.characterGender,
-    apiKey
-  );
+  // const characterImage = await dallERequest(
+  //   chosenGenre,
+  //   chosenCharacter,
+  //   characterData.characterFacialFeatures,
+  //   characterData.characterGender,
+  //   apiKey
+  // );
 
   return {
     characterTraits: characterData.characterTraits,
     characterBio: characterData.characterBio,
-    characterImage: characterImage,
+    characterImage: chosenImage,
     characterGender: characterData.characterGender,
   };
 };
