@@ -9,10 +9,6 @@
   color: lime; /* Lime green color for that old school terminal look */
 }
 
-html, body {
-  overflow: hidden;
-}
-
 .pause-button {
   position: absolute;
   top: 20px;
