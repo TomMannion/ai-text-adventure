@@ -1,7 +1,14 @@
 // src/hooks/useStoryProgress.ts
-import { useContext } from 'react';
-import { AppContext } from '../AppContext';
-import { fetchNextStoryPartAndOptions, fetchStorySummary } from './fetchNextStoryPart';
+import { useContext } from "react";
+import { AppContext } from "../AppContext";
+import {
+  fetchNextStoryPartAndOptions,
+  fetchStorySummary,
+} from "./fetchNextStoryPart";
+import {
+  fetchEndingStoryPartAndOptions,
+  fetchDetailedStorySummary,
+} from "./fetchEndingStoryPartAndOptions";
 
 interface Option {
   text: string;
@@ -10,53 +17,101 @@ interface Option {
 
 const useStoryProgress = () => {
   const { state, setState } = useContext(AppContext);
-  const { storySummary, previousParagraph, chosenCharacter, chosenGenre, characterTraits, characterBio, characterGender, apiKey, provider } = state;
+  const {
+    storySummary,
+    previousParagraph,
+    chosenCharacter,
+    chosenGenre,
+    characterTraits,
+    characterBio,
+    characterGender,
+    apiKey,
+    provider,
+    turnCount,
+  } = state;
 
   const handleUserInput = async (option: Option) => {
-    setState(prevState => ({ ...prevState, isLoading: true, input: option.text }));
+    setState((prevState) => ({ ...prevState, isLoading: true }));
 
-    // Fetch the next story part and options
-    const { 
-      storySegment, 
-      options,
-    } = await fetchNextStoryPartAndOptions(
-      storySummary,
-      previousParagraph,
-      option,
-      chosenCharacter,
-      chosenGenre,
-      characterTraits,
-      characterBio,
-      characterGender,
-      apiKey,
-      provider
-    );
+    let storySegment: string;
+    let options: any;
+    let isFinal = false;
+
+    if (turnCount >= 8) {
+      // Concluding the story
+      const response = await fetchEndingStoryPartAndOptions(
+        storySummary,
+        previousParagraph,
+        option,
+        chosenCharacter,
+        chosenGenre,
+        characterTraits,
+        characterBio,
+        characterGender,
+        apiKey,
+        provider
+      );
+      storySegment = response.storySegment;
+      options = response.options;
+      isFinal = response.isFinal;
+    } else {
+      // Continuing the story
+      const response = await fetchNextStoryPartAndOptions(
+        storySummary,
+        previousParagraph,
+        option,
+        chosenCharacter,
+        chosenGenre,
+        characterTraits,
+        characterBio,
+        characterGender,
+        apiKey,
+        provider
+      );
+      storySegment = response.storySegment;
+      options = response.options;
+    }
 
     // Fetch the story summary
-    const { 
-      newStorySummary,
-      storyStatus, 
-    } = await fetchStorySummary(
+    const { newStorySummary, storyStatus } = await fetchStorySummary(
       storySegment,
       apiKey,
       provider
     );
 
-    const optionFormatted = option.text;
-
-    setState(prevState => ({
+    setState((prevState) => ({
       ...prevState,
-      storySummary: [...prevState.storySummary, optionFormatted, newStorySummary],
-      storyAndUserInputs: [...prevState.storyAndUserInputs, option.text, storySegment],
-      storyStatus, turnCount: prevState.turnCount + 1,
+      storySummary: [...prevState.storySummary, option.text, newStorySummary],
+      storyAndUserInputs: [
+        ...prevState.storyAndUserInputs,
+        option.text,
+        storySegment,
+      ],
+      storyStatus,
+      turnCount: prevState.turnCount + 1,
       previousParagraph: storySegment,
       options,
       isLoading: false,
     }));
 
-    if (storyStatus === 'completed' || storyStatus === 'died') {
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      setState({ ...state, gameState: 'genreSelection' });
+    if (isFinal) {
+      const {
+        wrapUpParagraph,
+        bigMoment,
+        frequentActivity,
+        characterTraitHighlight,
+        themeExploration,
+      } = await fetchDetailedStorySummary(storySummary, apiKey, provider);
+      setState({
+        ...state,
+        isFinal: isFinal,
+        gameState: "endingScreen",
+        wrapUpParagraph,
+        bigMoment,
+        frequentActivity,
+        characterTraitHighlight,
+        themeExploration,
+      });
     }
   };
 

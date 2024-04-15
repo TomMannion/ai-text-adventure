@@ -2,14 +2,14 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center; /* Align buttons at the start */
+  padding-top: 10px;
   gap: 10px; /* Space between buttons */
-  padding: 10px;
   border: 1px solid lime;
   margin: 0 auto;
-  width: 100%; /* Ensure the container fills its parent's width */
-  height: 100vh;
+  width: 80%; /* Ensure the container fills its parent's width */
+  height: calc(100vh - 350px); /* Adjusted to subtract the height of the selected character display */
   box-sizing: border-box; /* Include padding and border in the width calculation */
-  overflow-x: auto;
+  overflow-y: auto; /* Changed to vertical overflow */
 }
 
 
@@ -26,8 +26,8 @@
 }
 
 .character-image-button {
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 140px;
   background-color: black;
   border: 1px solid lime;
   display: flex;
@@ -51,3 +51,50 @@
 .character-button.selected {
   border-color: black;
 }
+
+.character-image-button:hover, .character-image-button.selected {
+  background-color: lime;
+  color: black;
+}
+
+.selected-character-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.selected-character-image {
+  width: 200px; /* Larger size */
+  height: 200px;
+  border: 5px solid lime;
+  margin-bottom: 10px;
+}
+
+.pulse-button {
+  background-color: black;
+  color: lime;
+  width: 200px;
+  border: 1px solid lime;
+  padding: 0.5em 1em;
+  font-family: 'Courier New', Courier, monospace;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Existing CSS for other elements... */
+

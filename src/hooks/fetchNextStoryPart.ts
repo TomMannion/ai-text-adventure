@@ -1,6 +1,6 @@
-import chatGPTRequest from '../chatGPTRequest';
-import processJson from '../utils/processJson';
-import filterOptionsNew from '../utils/filterOptionsNew';
+import chatGPTRequest from "../chatGPTRequest";
+import processJson from "../utils/processJson";
+import filterOptionsNew from "../utils/filterOptionsNew";
 
 interface NextStoryPart {
   storySegment: string;
@@ -19,29 +19,33 @@ const fetchNextStoryPartAndOptions = async (
   apiKey: string,
   provider: string
 ): Promise<NextStoryPart> => {
-
   const formatStorySummary = (storySummary: string[]): string => {
-    let storySummaryFormatted = '';
+    let storySummaryFormatted = "";
 
     for (let i = 0; i < storySummary.length; i++) {
       if (i % 2 === 0) {
-        storySummaryFormatted += `${i / 2 + 1} Story Segment: "${storySummary[i]}" - `;
+        storySummaryFormatted += `${i / 2 + 1} Story Segment: "${
+          storySummary[i]
+        }" - `;
       } else {
         storySummaryFormatted += `User's Choice: "${storySummary[i]}"\n`;
       }
     }
 
     return storySummaryFormatted;
-}
-
+  };
 
   const prompt1 = `
   Please read this entire prompt before starting the task.
-  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with traits "${characterTraits.join('", "')}" and backstory "${characterBio}".
+  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with traits "${characterTraits.join(
+    '", "'
+  )}" and backstory "${characterBio}".
   This is a summary of the previous segments and user's choices: 
   ${formatStorySummary(storySummary.slice(-16))}
   read through this carefully as to no repeat senarios or options.
-  Given the previous paragraph "${previousParagraph}", the user's action "${input.text}". create the next segment of the story (65-200 words). Make sure the story:
+  Given the previous paragraph "${previousParagraph}", the user's action "${
+    input.text
+  }". create the next segment of the story (65-200 words). Make sure the story:
   - Continues logically from what's happened so far including the summary of previous segments and user's choices
   - When addressing the main character refer to them as "you" or "your"
   - Is unique and avoids clichés
@@ -72,7 +76,7 @@ const fetchNextStoryPartAndOptions = async (
 
   let response;
   let responseObject: NextStoryPart = {
-    storySegment: '',
+    storySegment: "",
     options: {},
   };
   let success = false;
@@ -86,10 +90,10 @@ const fetchNextStoryPartAndOptions = async (
       const filteredOptions = filterOptionsNew(responseObject.options);
       responseObject.options = filteredOptions;
 
-      console.log('responseObject', responseObject);
+      console.log("responseObject", responseObject);
       success = true;
     } catch (error) {
-      console.error('Error processing response, retrying request...', error);
+      console.error("Error processing response, retrying request...", error);
     }
   }
 
@@ -106,7 +110,6 @@ const fetchStorySummary = async (
   apiKey: string,
   provider: string
 ): Promise<StorySummary> => {
-
   const prompt2 = `
   Write a concise summary of this story segment "${storySegment}" in one paragraph. The summary should include:
   - Character interactions (actions, dialogues, emotions, reactions)
@@ -127,8 +130,8 @@ const fetchStorySummary = async (
 
   let response;
   let responseObject: StorySummary = {
-    newStorySummary: '',
-    storyStatus: '',
+    newStorySummary: "",
+    storyStatus: "",
   };
   let success = false;
 
@@ -137,10 +140,10 @@ const fetchStorySummary = async (
       response = await chatGPTRequest(prompt2, apiKey, provider);
       responseObject = processJson<StorySummary>(response[0]);
 
-      console.log('responseObject', responseObject);
+      console.log("responseObject", responseObject);
       success = true;
     } catch (error) {
-      console.error('Error processing response, retrying request...', error);
+      console.error("Error processing response, retrying request...", error);
     }
   }
 
@@ -148,4 +151,3 @@ const fetchStorySummary = async (
 };
 
 export { fetchNextStoryPartAndOptions, fetchStorySummary };
-

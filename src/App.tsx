@@ -1,17 +1,18 @@
 // App.tsx
-import React, { useState, useContext } from 'react';
-import './App.css';
-import CharacterImageSelection from './components/CharacterImageSelection'
-import APIKeyInput from './components/APIKeyInput';
-import GameOutput from './components/GameOutput';
-import CharacterInfo from './components/CharacterInfo';
-import LoadingBar from './components/LoadingBar';
-import GenreSelectionContainer from './containers/GenreSelectionContainer';
-import CharacterSelectionContainer from './containers/CharacterSelectionContainer';
-import useFetchGameData from './hooks/useFetchGameData';
-import { AppContext } from './AppContext';
-import useStoryProgress from './hooks/useStoryProgress';
-import DroneComponent from './components/DroneComponent';
+import React, { useState, useContext } from "react";
+import "./App.css";
+import ImageCarousel from "./components/CharacterImageSelection";
+import APIKeyInput from "./components/APIKeyInput";
+import GameOutput from "./components/GameOutput";
+import CharacterInfo from "./components/CharacterInfo";
+import LoadingBar from "./components/LoadingBar";
+import GenreSelectionContainer from "./containers/GenreSelectionContainer";
+import CharacterSelectionContainer from "./containers/CharacterSelectionContainer";
+import useFetchGameData from "./hooks/useFetchGameData";
+import { AppContext } from "./AppContext";
+import useStoryProgress from "./hooks/useStoryProgress";
+import EndingScreen from "./components/EndingScreen";
+import DroneComponent from "./components/DroneComponent";
 
 const App: React.FC = () => {
   const { state } = useContext(AppContext);
@@ -23,9 +24,16 @@ const App: React.FC = () => {
     chosenImage,
     options,
     gameState,
+    storySummary,
     storyAndUserInputs,
     turnCount,
     isLoading,
+    isFinal,
+    wrapUpParagraph,
+    bigMoment,
+    frequentActivity,
+    characterTraitHighlight,
+    themeExploration,
   } = state;
 
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
@@ -36,12 +44,20 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      {gameState === 'apiKeyInput' && <div><APIKeyInput /></div>}
-      {gameState === 'genreSelection' && <GenreSelectionContainer />}
-      {gameState === 'characterSelection' && <CharacterSelectionContainer />}
-      {gameState === 'characterImageSelection' && <div><CharacterImageSelection /></div>}
-      {gameState === 'loading' && <LoadingBar progress={loadingProgress} />}
-      {gameState === 'playing' && (
+      {gameState === "apiKeyInput" && (
+        <div>
+          <APIKeyInput />
+        </div>
+      )}
+      {gameState === "genreSelection" && <GenreSelectionContainer />}
+      {gameState === "characterSelection" && <CharacterSelectionContainer />}
+      {gameState === "characterImageSelection" && (
+        <div>
+          <ImageCarousel />
+        </div>
+      )}
+      {gameState === "loading" && <LoadingBar progress={loadingProgress} />}
+      {gameState === "playing" && (
         <div className="playing-container">
           <div className="game-and-user-input">
             <GameOutput
@@ -50,6 +66,7 @@ const App: React.FC = () => {
               turnCount={turnCount}
               isLoading={isLoading}
               options={options}
+              isFinal={isFinal}
               handleOptionsClick={handleUserInput}
             />
             {/* <MusicPlayer genre={'TraditionalHorror'} /> */}
@@ -61,6 +78,17 @@ const App: React.FC = () => {
             characterImage={chosenImage}
           />
         </div>
+      )}
+      {gameState === "endingScreen" && (
+        <EndingScreen
+          characterImage={chosenImage}
+          output={storyAndUserInputs}
+          wrapUpParagraph={wrapUpParagraph}
+          bigMoment={bigMoment}
+          frequentActivity={frequentActivity}
+          characterTraitHighlight={characterTraitHighlight}
+          themeExploration={themeExploration}
+        />
       )}
     </div>
   );

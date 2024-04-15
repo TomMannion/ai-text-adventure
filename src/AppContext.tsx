@@ -1,6 +1,13 @@
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode } from "react";
 
-type GameState = 'apiKeyInput' | 'playing' | 'characterImageSelection' | 'characterSelection' | 'loading' | 'genreSelection';
+type GameState =
+  | "apiKeyInput"
+  | "playing"
+  | "characterImageSelection"
+  | "characterSelection"
+  | "loading"
+  | "genreSelection"
+  | "endingScreen";
 
 type AppState = {
   gameState: GameState;
@@ -22,12 +29,18 @@ type AppState = {
   loadingProgress: number;
   turnCount: number;
   isLoading: boolean;
+  isFinal: boolean;
   apiKey: string;
   provider: string;
   nextPartOfStory: string;
   previousParagraph: string;
   tempOptions: { [key: string]: string };
   charactersList: string;
+  wrapUpParagraph: string;
+  bigMoment: string;
+  frequentActivity: string;
+  characterTraitHighlight: string;
+  themeExploration: string;
 };
 
 type AppContextType = {
@@ -37,31 +50,37 @@ type AppContextType = {
 
 const AppContext = createContext<AppContextType>({
   state: {
-    gameState: 'apiKeyInput',
+    gameState: "apiKeyInput",
     genres: [],
     characters: {},
-    chosenGenre: '',
-    chosenCharacter: '',
+    chosenGenre: "",
+    chosenCharacter: "",
     characterTraits: [],
-    characterBio: '',
-    characterGender: '',
-    chosenImage: '',
-    characterList: '',
-    storyStart: '',
+    characterBio: "",
+    characterGender: "",
+    chosenImage: "",
+    characterList: "",
+    storyStart: "",
     storySummary: [],
     options: {},
-    input: '',
+    input: "",
     storySoFar: [],
     storyAndUserInputs: [],
     loadingProgress: 0,
     turnCount: 0,
     isLoading: false,
-    apiKey: '',
-    provider: '',
-    nextPartOfStory: '',
-    previousParagraph: '',
+    isFinal: false,
+    apiKey: "",
+    provider: "",
+    nextPartOfStory: "",
+    previousParagraph: "",
     tempOptions: {},
-    charactersList: '',
+    charactersList: "",
+    wrapUpParagraph: "",
+    bigMoment: "",
+    frequentActivity: "",
+    characterTraitHighlight: "",
+    themeExploration: "",
   },
   setState: () => null,
 });
@@ -72,33 +91,43 @@ export type AppProviderProps = {
 
 const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, setState] = useState<AppState>({
-    gameState: 'apiKeyInput',
+    gameState: "apiKeyInput",
     genres: [],
     characters: {},
-    chosenGenre: '',
-    chosenCharacter: '',
+    chosenGenre: "",
+    chosenCharacter: "",
     characterTraits: [],
-    characterBio: '',
-    characterGender: '',
-    chosenImage: '',
-    characterList: '',
-    storyStart: '',
+    characterBio: "",
+    characterGender: "",
+    chosenImage: "",
+    characterList: "",
+    storyStart: "",
     storySummary: [],
     options: {},
-    input: '',
+    input: "",
     storySoFar: [],
     storyAndUserInputs: [],
     loadingProgress: 0,
     turnCount: 0,
     isLoading: false,
-    apiKey: '',
-    provider: '',
-    nextPartOfStory: '',
-    previousParagraph: '',
+    isFinal: false,
+    apiKey: "",
+    provider: "",
+    nextPartOfStory: "",
+    previousParagraph: "",
     tempOptions: {},
-    charactersList: '',
+    charactersList: "",
+    wrapUpParagraph: "",
+    bigMoment: "",
+    frequentActivity: "",
+    characterTraitHighlight: "",
+    themeExploration: "",
   });
-  return <AppContext.Provider value={{ state, setState }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={{ state, setState }}>
+      {children}
+    </AppContext.Provider>
+  );
 };
 
 export { AppContext, AppProvider };

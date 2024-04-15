@@ -1,0 +1,118 @@
+/* src/components/EndingScreen.css */
+.ending-screen {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: lime; /* Lime green color for that old school terminal look */
+}
+
+html, body {
+  overflow: hidden;
+}
+
+.pause-button {
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  width: 115px !important;
+  color: lime !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.character-portrait {
+  position: relative;
+  width: 80vw;
+  height: 80vh;
+  margin-bottom: 20px;
+}
+
+.character-portrait::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* 70% black overlay */
+  z-index: 1; /* Ensure it's above the image but below the text if any */
+}
+
+.character-slice {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateX(-100%);
+  transition: transform 0.8s ease-out;
+  animation: slide-in 0.8s forwards;
+  /* Mask with pixelation effect */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.story-summary {
+  width: 80vw;
+  height: 100% !important;
+  text-align: center;
+  animation: scroll-up 50s linear infinite; /* Adjust duration as needed for readability */
+  z-index: 2;
+}
+
+.story-summary.paused {
+  animation-play-state: paused; /* CSS property to pause animations */
+}
+
+/* src/components/EndingScreen.css */
+.story-summary h1, .story-summary h2 {
+  color: white; /* Base text color */
+  position: relative;
+  /* Applying flickering glow animation to text */
+  animation: flicker-glow 1.5s infinite alternate;
+}
+
+@keyframes flicker-glow {
+  0% {
+    text-shadow:
+      0 0 5px rgba(255, 255, 255, 0.1),
+      0 0 10px rgba(255, 255, 255, 0.1),
+      0 0 15px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    text-shadow:
+      0 0 2px rgba(255, 255, 255, 0.3),
+      0 0 8px rgba(255, 255, 255, 0.3),
+      0 0 13px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    text-shadow:
+      0 0 3px rgba(255, 255, 255, 0.5),
+      0 0 12px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 255, 255, 0.5);
+  }
+}
+
+
+@keyframes scroll-up {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(calc(-1 * var(--scroll-height) - var(--view-height)));
+  }
+}

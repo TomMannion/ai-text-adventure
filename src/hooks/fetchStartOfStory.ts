@@ -1,6 +1,6 @@
-import chatGPTRequest from '../chatGPTRequest';
-import processJson from '../utils/processJson';
-import filterOptionsNew from '../utils/filterOptionsNew';
+import chatGPTRequest from "../chatGPTRequest";
+import processJson from "../utils/processJson";
+import filterOptionsNew from "../utils/filterOptionsNew";
 
 interface StartOfStory {
   storyStart: string;
@@ -18,7 +18,9 @@ const fetchStoryStart = async (
 ): Promise<StartOfStory> => {
   const prompt1 = `
   Please read the following instructions carefully before proceeding:
-  You're an AI writing a text-based adventure game. The protagonist is ${chosenCharacter}, who is ${characterGender}, with these traits: "${characterTraits.join('", "')}" and this backstory: "${characterBio}".
+  You're an AI writing a text-based adventure game. The protagonist is ${chosenCharacter}, who is ${characterGender}, with these traits: "${characterTraits.join(
+    '", "'
+  )}" and this backstory: "${characterBio}".
   The genre of our game is ${chosenGenre}. First, Craft a compelling opening scene (65-200 words) that starts the adventure. Make sure to:
   - When addressing the main character refer to them as "you" or "your"
   - Choose a unique and lesser-known setting within the genre
@@ -44,7 +46,7 @@ const fetchStoryStart = async (
     }
   }
 
-  `
+  `;
 
   const response = await chatGPTRequest(prompt1, apiKey, provider);
   const responseObject: StartOfStory = processJson<StartOfStory>(response[0]);
@@ -75,7 +77,7 @@ Strictly put your responses in this JSON format:
   "newStorySummary": "{summary of story segment}",
 }
 
-`
+`;
 
   const response = await chatGPTRequest(prompt2, apiKey, provider);
   const responseObject = processJson<{ newStorySummary: string }>(response[0]);
@@ -84,7 +86,3 @@ Strictly put your responses in this JSON format:
 };
 
 export { fetchStoryStart, fetchStorySummary };
-
-
-
-

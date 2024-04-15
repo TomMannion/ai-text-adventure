@@ -1,6 +1,6 @@
 // src/components/Options.tsx
-import React from 'react';
-import './Options.css';
+import React from "react";
+import "./Options.css";
 
 interface Option {
   text: string;
@@ -20,7 +20,7 @@ const Options: React.FC<OptionsProps> = ({ options, handleClick }) => {
           onClick={() => handleClick(option)} // Pass the whole option object
           key={optionKey}
         >
-          {optionKey}: {option.text}
+          {option.text}
         </button>
       ))}
     </div>

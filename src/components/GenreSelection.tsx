@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
-import { AppContext } from '../AppContext';
-import './GenreSelection.css';
+import React, { useContext, useState } from "react";
+import { AppContext } from "../AppContext";
+import "./GenreSelection.css";
 
 interface GenreSelectionProps {
   genres: string[];
@@ -8,15 +8,21 @@ interface GenreSelectionProps {
 
 const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
   const { state, setState } = useContext(AppContext);
-  const [customGenre, setCustomGenre] = useState<string>('');
+  const [customGenre, setCustomGenre] = useState<string>("");
 
-  const handleCustomGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCustomGenreChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setCustomGenre(event.target.value);
   };
 
   const handleCustomGenreSubmit = () => {
     if (customGenre.trim()) {
-      setState({ ...state, chosenGenre: customGenre, gameState: 'characterImageSelection' });
+      setState({
+        ...state,
+        chosenGenre: customGenre,
+        gameState: "characterImageSelection",
+      });
     }
   };
 
@@ -27,6 +33,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
         <input
           type="text"
           placeholder="Enter custom genre"
+          required
           value={customGenre}
           onChange={handleCustomGenreChange}
         />
@@ -37,7 +44,11 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
           <button
             key={genre}
             onClick={() => {
-              setState({ ...state, chosenGenre: genre, gameState: 'characterImageSelection' });
+              setState({
+                ...state,
+                chosenGenre: genre,
+                gameState: "characterImageSelection",
+              });
             }}
           >
             {genre}
@@ -49,6 +60,3 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
 };
 
 export default GenreSelection;
-
-
-
