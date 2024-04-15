@@ -11,7 +11,7 @@
 
 MyTextAdventure is an interactive, procedurally generated text adventure game powered by the OpenAI API. Choose your favorite genre and dive into an immersive world created just for you! Our advanced prompt engineering ensures that GPT responses are intelligently formatted and integrated into your unique adventure.
 
-A link to it up and running: https://text-adventure-openai.surge.sh/
+A link to it up and running: https://llm-text-adventure.surge.sh/
 Please be aware you will need to create an account with OpenAI for gain an API key to use this app.
 
 ## Table of Contents
