@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import fetchCharacters from './fetchCharacters';
+import { useState, useEffect } from "react";
+import fetchCharacters from "./fetchCharacters";
 
 const useFetchCharacters = (chosenGenre: string) => {
   const [firstNames, setFirstNames] = useState<string[]>([]);
@@ -7,7 +7,7 @@ const useFetchCharacters = (chosenGenre: string) => {
 
   useEffect(() => {
     const fetchCharactersData = async () => {
-      if (chosenGenre !== '') {
+      if (chosenGenre !== "") {
         const { firstNames, lastNames } = await fetchCharacters();
         setFirstNames(firstNames);
         setLastNames(lastNames);

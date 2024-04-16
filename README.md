@@ -34,13 +34,13 @@ Please be aware you will need to create an account with OpenAI for gain an API k
 
 <p align="center">
   <img src="./screenshots/api.png" alt="Screenshot 1" width="600">
-  <img src="./screenshots/genre.png" alt="Screenshot 2" width="600">
-  <img src="./screenshots/character.png" alt="Screenshot 3" width="600">
-  <img src="./screenshots/loading.png" alt="Screenshot 4" width="600">
-  <img src="./screenshots/story.png" alt="Screenshot 5" width="600">
-  <img src="./screenshots/storymobile.png" alt="Screenshot 6" width="600">
-  <img src="./screenshots/bio.png" alt="Screenshot 6" width="600">
-  <img src="./screenshots/biomobile.png" alt="Screenshot 6" width="600">
+  <img src="./screenshots/loadGame.png" alt="Screenshot 2" width="600">
+  <img src="./screenshots/genre.png" alt="Screenshot 3" width="600">
+  <img src="./screenshots/characterImage.png" alt="Screenshot 4" width="600">
+  <img src="./screenshots/character.png" alt="Screenshot 5" width="600">
+  <img src="./screenshots/loading.png" alt="Screenshot 6" width="600">
+  <img src="./screenshots/bio.png" alt="Screenshot 7" width="600">
+  <img src="./screenshots/storymobile.png" alt="Screenshot 8" width="600">
 </p>
 
 ## Installation
