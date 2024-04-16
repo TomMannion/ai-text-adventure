@@ -6,7 +6,7 @@ h2 {
   border: 1px solid lime;
   padding: 1em;
   overflow-y: auto;
-  height: calc(100vh - 2em);
+  height: calc(65vh);
   width: 70%;
   margin: 0 auto;
   display: flex;
