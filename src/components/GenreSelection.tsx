@@ -37,7 +37,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
           value={customGenre}
           onChange={handleCustomGenreChange}
         />
-        <button onClick={handleCustomGenreSubmit}>Submit Custom Genre</button>
+        <button onClick={handleCustomGenreSubmit}>Submit Genre</button>
       </div>
       <div className="genre-selection-container">
         {genres.map((genre, index) => (
