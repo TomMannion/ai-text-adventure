@@ -6,6 +6,9 @@ const fetchGenres = async () => {
   const genres: string[] = [
     "Weird West",
     "Dieselpunk",
+    "Time Travel Adventure",
+    "Post-Apocalyptic Survival",
+    "Lovecraftian Horror",
     "Solarpunk",
     "Biopunk",
     "Mythpunk",
