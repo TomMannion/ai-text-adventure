@@ -38,7 +38,7 @@ const GameOutput: React.FC<GameOutputProps> = ({
     }
   }, [output, isLoading]);
 
-  console.log("GameOutput output:", output);
+  // console.log("GameOutput output:", output);
   return (
     <div className="game-output component-container">
       <div className="game-output-info">

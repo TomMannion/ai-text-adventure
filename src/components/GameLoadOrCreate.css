@@ -1,0 +1,22 @@
+/* GameLoadOrCreate.css */
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* adjust according to your needs */
+    flex-direction: column;
+  }
+  
+  .game-button {
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+    font-size: 1em;
+    border: 2px solid lime;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  

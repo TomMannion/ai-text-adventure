@@ -37,7 +37,7 @@ const fetchNextStoryPartAndOptions = async (
 
   const prompt1 = `
   Please read this entire prompt before starting the task.
-  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with traits "${characterTraits.join(
+  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with these quirks "${characterTraits.join(
     '", "'
   )}" and backstory "${characterBio}".
   This is a summary of the previous segments and user's choices: 
@@ -54,11 +54,13 @@ const fetchNextStoryPartAndOptions = async (
   - Incorporates meaningful choices and consequences
   - Develops characters and their relationships
   - Balances action, dialogue, and description
-  - Reaches a climax and completes the story arc when appropriate
+  - Avoid clichés and overused tropes
+  - Only incorporate characters quirks and backstory if they fit the current scene
 
   the user guides the story with their choices, so you must respect their choices even if they choose to make a bad decision.
 
-  Now, Provide 3-5 game options in the options key of the JSON that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure the options reflect the character's traits and backstory and offer opportunities for character development and exploration of genre themes.
+  Now, Provide 2-4 game options that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure each option fits the game's setting, leads to different story paths, and includes a risk level (low, medium, high). Include a "risky" option if possible.
+  Try to make options specific and unique to the story or current scene, also avoid common tropes for creating options.
 
   Strictly put your responses in this JSON format:
   {
@@ -68,10 +70,9 @@ const fetchNextStoryPartAndOptions = async (
         "text": "{option text, 10-30 words}",
         "risk": "{risk level, low, medium, high}",
       },
-      // ... up to option5 in the same format
+      // ... up to option4 in the same format
     }
   }
-
   `;
 
   let response;
@@ -90,7 +91,7 @@ const fetchNextStoryPartAndOptions = async (
       const filteredOptions = filterOptionsNew(responseObject.options);
       responseObject.options = filteredOptions;
 
-      console.log("responseObject", responseObject);
+      // console.log("responseObject", responseObject);
       success = true;
     } catch (error) {
       console.error("Error processing response, retrying request...", error);
@@ -140,7 +141,7 @@ const fetchStorySummary = async (
       response = await chatGPTRequest(prompt2, apiKey, provider);
       responseObject = processJson<StorySummary>(response[0]);
 
-      console.log("responseObject", responseObject);
+      // console.log("responseObject", responseObject);
       success = true;
     } catch (error) {
       console.error("Error processing response, retrying request...", error);

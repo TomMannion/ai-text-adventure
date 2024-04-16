@@ -13,6 +13,7 @@
 .playing-container {
   display: flex;
   flex-direction: row;
+  width: 100%
 }
 
 .game-and-user-input {
@@ -28,6 +29,7 @@
 .App .component-container {
   border: 1px solid lime;
   border-radius: 5px;
+  overflow: hidden;
 }
 
 

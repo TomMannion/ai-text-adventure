@@ -7,7 +7,8 @@ type GameState =
   | "characterSelection"
   | "loading"
   | "genreSelection"
-  | "endingScreen";
+  | "endingScreen"
+  | "loadOrCreate";
 
 type AppState = {
   gameState: GameState;

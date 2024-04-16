@@ -17,7 +17,7 @@ const APIKeyInput: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setState({ ...state, apiKey, provider, gameState: "genreSelection" });
+    setState({ ...state, apiKey, provider, gameState: "loadOrCreate" });
   };
 
   return (

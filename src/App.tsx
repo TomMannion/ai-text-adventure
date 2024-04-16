@@ -1,5 +1,5 @@
 // App.tsx
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./App.css";
 import ImageCarousel from "./components/CharacterImageSelection";
 import APIKeyInput from "./components/APIKeyInput";
@@ -12,6 +12,8 @@ import useFetchGameData from "./hooks/useFetchGameData";
 import { AppContext } from "./AppContext";
 import useStoryProgress from "./hooks/useStoryProgress";
 import EndingScreen from "./components/EndingScreen";
+import GameLoadOrCreate from "./components/GameLoadOrCreate";
+import { saveStoryToDB } from "./helpers/indexedDB";
 import DroneComponent from "./components/DroneComponent";
 
 const App: React.FC = () => {
@@ -36,6 +38,16 @@ const App: React.FC = () => {
     themeExploration,
   } = state;
 
+  useEffect(() => {
+    if (gameState === "playing") {
+      try {
+        saveStoryToDB(state);
+      } catch (error) {
+        console.error("Failed to save game:", error);
+      }
+    }
+  }, [state]);
+
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
 
   useFetchGameData(setLoadingProgress);
@@ -49,6 +61,7 @@ const App: React.FC = () => {
           <APIKeyInput />
         </div>
       )}
+      {gameState === "loadOrCreate" && <GameLoadOrCreate />}
       {gameState === "genreSelection" && <GenreSelectionContainer />}
       {gameState === "characterSelection" && <CharacterSelectionContainer />}
       {gameState === "characterImageSelection" && (

@@ -76,7 +76,7 @@ const fetchEndingStoryPartAndOptions = async (
       const filteredOptions = filterOptionsNew(responseObject.options);
       responseObject.options = filteredOptions;
 
-      console.log("responseObject", responseObject);
+      // console.log("responseObject", responseObject);
       success = true;
     } catch (error) {
       console.error("Error processing response, retrying request...", error);
@@ -131,7 +131,7 @@ Please format the responses like this, ready to be shared and enjoyed on social 
     try {
       response = await chatGPTRequest(prompt, apiKey, provider);
       responseObject = processJson<StorySummary>(response[0]);
-      console.log("Detailed Story Summary:", responseObject);
+      // console.log("Detailed Story Summary:", responseObject);
       success = true;
     } catch (error) {
       console.error("Error processing response, retrying request...", error);

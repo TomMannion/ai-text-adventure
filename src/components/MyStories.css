@@ -1,0 +1,54 @@
+/* MyStories.css */
+
+.stories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust the minmax value according to your needs */
+    gap: 1rem; /* Adjust the gap between the cards */
+    max-height: 60vh;
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 2px solid lime;
+    padding: 1rem;
+  }
+  
+  .story-card-story {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+    border: 2px solid lime;
+    padding: 1rem;
+  }
+
+  .card-content-story {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .character-info-story {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .character-name-story {
+  }
+  
+  .character-image-story {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid lime;
+  }
+  
+  .story-paragraph {
+    margin-top: 1rem;
+  }
+  
+  .card-buttons {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  

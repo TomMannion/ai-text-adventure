@@ -44,11 +44,7 @@ const GenreSelection: React.FC<GenreSelectionProps> = ({ genres }) => {
           <button
             key={genre}
             onClick={() => {
-              setState({
-                ...state,
-                chosenGenre: genre,
-                gameState: "characterImageSelection",
-              });
+              setCustomGenre(genre);
             }}
           >
             {genre}
