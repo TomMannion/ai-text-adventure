@@ -35,29 +35,31 @@ const fetchEndingStoryPartAndOptions = async (
   };
 
   const prompt = `
-    Analyze the current trajectory of the story based on the last 16 turns. Here is a brief summary of previous segments and choices:
-    ${formatStorySummary(storySummary.slice(-16))}
-    Previously, "${previousParagraph}", the user chose "${
+  Please assess the current trajectory of our text-based adventure game based on the last 16 turns. Here’s a summary of recent segments and user choices:
+  ${formatStorySummary(storySummary.slice(-16))}
+  Previously, "${previousParagraph}", the user chose "${
     input.text
-  }". Given the chosen genre "${chosenGenre}" and the character "${chosenCharacter}" (who is ${characterGender}) with traits [${characterTraits.join(
+  }". Considering the genre "${chosenGenre}" and our main character "${chosenCharacter}", who is ${characterGender}, with traits [${characterTraits.join(
     ", "
-  )}] and backstory "${characterBio}", determine if it's time to bring the story towards a climax and conclusion.
-    If so, create a final segment (65-200 words) that provides a resolution or climax fitting the story's progression and themes.
-    If not, continue the story logically, maintaining tension and progression towards an eventual climax.
-    Also, provide options reflecting either a move towards conclusion or ongoing development, with appropriate risk levels.
-    If it is the final story segment, please only include one option in 'option1' with the text: 'THE END',
-    e.g.
-
-    Strictly put your responses in this JSON format:
-    {
-      "storySegment": "{final or ongoing segment text}",
-      "options": {
-        "option1": { "text": "{option text, 10-30 words}", "risk": "{risk level}" },
-        "option2": { "text": "{option text, 10-30 words}", "risk": "{risk level}" },
-        "option3": { "text": "{option text, 10-30 words}", "risk": "{risk level}" }
-      },
-      "isFinal": {true if this is the final segment, else false}
-    }
+  )}] and a backstory "${characterBio}", decide if it's time to steer the story towards a climax and conclusion.
+  
+  Determine the course of action:
+  - If its time for the climax: Craft a final segment (65-200 words) that delivers a fitting resolution or climax, deeply aligned with the storys progression, thematic elements, and character development. The narrative should reflect complex character motivations, incorporate subplots or backstory elements where relevant, and evoke a strong emotional response such as suspense or catharsis. Provide only one option for the user with the text: 'The End'.
+  - If the story should continue: Develop the narrative logically, maintaining tension and leading towards a potential climax. Use innovative scenarios or twists that align with but refresh the genre conventions. Each segment should avoid clichés, feature rich descriptions that enhance immersion, and weave in literary techniques such as foreshadowing, metaphor, or non-linear elements to add depth and intrigue.
+  
+  Ensure all content is original, avoids overused tropes, and deeply engages the player emotionally and intellectually. Pay special attention to how the main character's personal journey is interwoven with the broader plot developments.
+  
+  Structure your response strictly in this JSON format:
+  {
+    "storySegment": "Text of the final or ongoing story segment",
+    "options": {
+      "option1": { "text": "Option text, 10-30 words", "risk": "Risk level" },
+      ...(include more options if not concluding)
+    },
+    "isFinal": true if concluding the story, otherwise false
+  }
+  
+  Focus on delivering a narrative that not only continues or concludes the story but also enriches the player's experience by making each decision and story development memorable and impactful.
   `;
 
   let response;
@@ -131,7 +133,6 @@ Please format the responses like this, ready to be shared and enjoyed on social 
     try {
       response = await chatGPTRequest(prompt, apiKey, provider);
       responseObject = processJson<StorySummary>(response[0]);
-      // console.log("Detailed Story Summary:", responseObject);
       success = true;
     } catch (error) {
       console.error("Error processing response, retrying request...", error);

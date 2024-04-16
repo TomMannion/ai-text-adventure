@@ -37,42 +37,39 @@ const fetchNextStoryPartAndOptions = async (
 
   const prompt1 = `
   Please read this entire prompt before starting the task.
-  You're an AI still writing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}", with these quirks "${characterTraits.join(
+  You're an AI continuing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}". The character has these unique traits "${characterTraits.join(
     '", "'
-  )}" and backstory "${characterBio}".
+  )}" and a compelling backstory "${characterBio}".
   This is a summary of the previous segments and user's choices: 
   ${formatStorySummary(storySummary.slice(-16))}
-  read through this carefully as to no repeat senarios or options.
-  Given the previous paragraph "${previousParagraph}", the user's action "${
+  Review this carefully to ensure no scenarios or options are repeated.
+  
+  Given the previous paragraph "${previousParagraph}" and the user's action "${
     input.text
-  }". create the next segment of the story (65-200 words). Make sure the story:
-  - Continues logically from what's happened so far including the summary of previous segments and user's choices
-  - When addressing the main character refer to them as "you" or "your"
-  - Is unique and avoids clichés
-  - Has detailed descriptions
-  - Builds tension and suspense
-  - Incorporates meaningful choices and consequences
-  - Develops characters and their relationships
-  - Balances action, dialogue, and description
-  - Avoid clichés and overused tropes
-  - Only incorporate characters quirks and backstory if they fit the current scene
-
-  the user guides the story with their choices, so you must respect their choices even if they choose to make a bad decision.
-
-  Now, Provide 2-4 game options that allow the player to keep exploring the story. Each option should be engaging, unique, and make sense within the story's progression and character's actions. Make sure each option fits the game's setting, leads to different story paths, and includes a risk level (low, medium, high). Include a "risky" option if possible.
-  Try to make options specific and unique to the story or current scene, also avoid common tropes for creating options.
-
+  }", create the next segment of the story (65-200 words). Ensure the story:
+  - Continues logically from what has happened so far, building on the summary of previous segments and user choices.
+  - Uses second person ("you" or "your") when referring to the main character.
+  - Is unique, avoids clichés, and incorporates literary techniques such as foreshadowing, non-linear narratives, or vivid imagery to enhance depth and interest.
+  - Includes detailed, immersive descriptions that bring scenes to life and heighten player engagement.
+  - Builds tension and suspense, progressively leading towards significant narrative peaks.
+  - Incorporates meaningful choices that have tangible consequences, reflecting the gravity of decisions.
+  - Further develops character relationships and dynamics, enriching the narrative fabric.
+  - Balances action, dialogue, and descriptive elements for a well-rounded story experience.
+  - Respects the user's decisions, even if they lead to challenging outcomes, and ensures all character quirks and backstory elements are contextually appropriate.
+  
+  Provide 2-4 game options that allow the player to explore the story further. Each option should:
+  - Be engaging, unique, and logical within the story's progression and the character's actions.
+  - Fit the game's setting and lead to distinct narrative paths with different risks (low, medium, high).
+  - Include at least one "risky" option to introduce unpredictability and challenge.
+  
   Strictly put your responses in this JSON format:
   {
-    "storySegment": "{opening paragraph or scene, 65-200 words}",
+    "storySegment": "Text of the opening paragraph or scene, 65-200 words",
     "options": {
-      "option1": { 
-        "text": "{option text, 10-30 words}",
-        "risk": "{risk level, low, medium, high}",
-      },
+      "option1": { "text": "Option text, 10-30 words", "risk": "low, medium, or high" },
       // ... up to option4 in the same format
     }
-  }
+  }  
   `;
 
   let response;

@@ -8,6 +8,7 @@ import {
 } from "../helpers/indexedDB";
 import { AppContext } from "../AppContext";
 import "./MyStories.css";
+import { StateTimeline } from "tone";
 
 type Story = {
   id: number;
@@ -43,12 +44,18 @@ const MyStories: React.FC = () => {
     }
   };
 
-  const { setState } = useContext(AppContext);
+  const { setState, state } = useContext(AppContext);
 
   const handleLoad = async (id: number) => {
     try {
       const storyData = await loadStoryFromDB(id);
+      const apiKeySave = state.apiKey;
       setState(storyData);
+      setState((prevState) => ({
+        ...prevState,
+        apiKey: apiKeySave,
+        isLoading: false,
+      }));
       alert("Story loaded!");
     } catch (error) {
       console.error("Failed to load story:", error);

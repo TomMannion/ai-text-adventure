@@ -2,8 +2,6 @@ import { useEffect, useContext } from "react";
 import { AppContext } from "../AppContext";
 import fetchCharacterTraitsAndBio from "./fetchCharacterTraitsAndBio";
 import { fetchStoryStart, fetchStorySummary } from "./fetchStartOfStory";
-import { getNextIdFromDB } from "../helpers/indexedDB";
-import { saveStoryToDB } from "../helpers/indexedDB";
 
 const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
   const { state, setState } = useContext(AppContext);

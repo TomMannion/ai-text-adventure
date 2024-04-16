@@ -31,11 +31,13 @@ const useStoryProgress = () => {
   } = state;
 
   const handleUserInput = async (option: Option) => {
-    setState((prevState) => ({ ...prevState, isLoading: true }));
-
     let storySegment: string;
     let options: any;
     let isFinal = false;
+    setState((prevState) => ({ ...prevState, isLoading: true }));
+    console.log("running again");
+
+    let wrapUpDetails = {};
 
     if (turnCount >= 8) {
       // Concluding the story
@@ -54,6 +56,14 @@ const useStoryProgress = () => {
       storySegment = response.storySegment;
       options = response.options;
       isFinal = response.isFinal;
+
+      if (isFinal) {
+        wrapUpDetails = await fetchDetailedStorySummary(
+          storySummary,
+          apiKey,
+          provider
+        );
+      }
     } else {
       // Continuing the story
       const response = await fetchNextStoryPartAndOptions(
@@ -79,6 +89,7 @@ const useStoryProgress = () => {
       provider
     );
 
+    // Update state once with conditional properties
     setState((prevState) => ({
       ...prevState,
       storySummary: [...prevState.storySummary, option.text, newStorySummary],
@@ -92,29 +103,15 @@ const useStoryProgress = () => {
       previousParagraph: storySegment,
       options,
       isLoading: false,
+      ...(isFinal
+        ? {
+            isFinal: true,
+            gameState: "endingScreen",
+            ...wrapUpDetails,
+          }
+        : {}),
     }));
-
-    if (isFinal) {
-      const {
-        wrapUpParagraph,
-        bigMoment,
-        frequentActivity,
-        characterTraitHighlight,
-        themeExploration,
-      } = await fetchDetailedStorySummary(storySummary, apiKey, provider);
-      setState({
-        ...state,
-        isFinal: isFinal,
-        gameState: "endingScreen",
-        wrapUpParagraph,
-        bigMoment,
-        frequentActivity,
-        characterTraitHighlight,
-        themeExploration,
-      });
-    }
   };
-
   return handleUserInput;
 };
 
