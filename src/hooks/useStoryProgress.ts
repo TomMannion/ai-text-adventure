@@ -31,86 +31,91 @@ const useStoryProgress = () => {
   } = state;
 
   const handleUserInput = async (option: Option) => {
-    let storySegment: string;
-    let options: any;
-    let isFinal = false;
-    setState((prevState) => ({ ...prevState, isLoading: true }));
-    console.log("running again");
+    try {
+      let storySegment: string;
+      let options: any;
+      let isFinal = false;
+      setState((prevState) => ({ ...prevState, isLoading: true }));
 
-    let wrapUpDetails = {};
+      let response,
+        wrapUpDetails = {};
 
-    if (turnCount >= 8) {
-      // Concluding the story
-      const response = await fetchEndingStoryPartAndOptions(
-        storySummary,
-        previousParagraph,
-        option,
-        chosenCharacter,
-        chosenGenre,
-        characterTraits,
-        characterBio,
-        characterGender,
-        apiKey,
-        provider
-      );
-      storySegment = response.storySegment;
-      options = response.options;
-      isFinal = response.isFinal;
-
-      if (isFinal) {
-        wrapUpDetails = await fetchDetailedStorySummary(
+      if (turnCount >= 7) {
+        response = await fetchEndingStoryPartAndOptions(
           storySummary,
+          previousParagraph,
+          option,
+          chosenCharacter,
+          chosenGenre,
+          characterTraits,
+          characterBio,
+          characterGender,
           apiKey,
           provider
         );
+        storySegment = response.storySegment;
+        options = response.options;
+        isFinal = response.isFinal;
+
+        if (isFinal) {
+          wrapUpDetails = await fetchDetailedStorySummary(
+            storySummary,
+            apiKey,
+            provider
+          );
+        }
+      } else {
+        response = await fetchNextStoryPartAndOptions(
+          storySummary,
+          previousParagraph,
+          option,
+          chosenCharacter,
+          chosenGenre,
+          characterTraits,
+          characterBio,
+          characterGender,
+          apiKey,
+          provider
+        );
+        storySegment = response.storySegment;
+        options = response.options;
       }
-    } else {
-      // Continuing the story
-      const response = await fetchNextStoryPartAndOptions(
-        storySummary,
-        previousParagraph,
-        option,
-        chosenCharacter,
-        chosenGenre,
-        characterTraits,
-        characterBio,
-        characterGender,
+
+      const { newStorySummary, storyStatus } = await fetchStorySummary(
+        storySegment,
         apiKey,
         provider
       );
-      storySegment = response.storySegment;
-      options = response.options;
+
+      setState((prevState) => ({
+        ...prevState,
+        storySummary: [...prevState.storySummary, option.text, newStorySummary],
+        storyAndUserInputs: [
+          ...prevState.storyAndUserInputs,
+          option.text,
+          storySegment,
+        ],
+        storyStatus,
+        turnCount: prevState.turnCount + 1,
+        previousParagraph: storySegment,
+        options,
+        isLoading: false,
+        ...(isFinal
+          ? {
+              isFinal: true,
+              gameState: "endingScreen",
+              ...wrapUpDetails,
+            }
+          : {}),
+      }));
+    } catch (error) {
+      console.error("Failed to process story progression:", error);
+      setState((prevState) => ({
+        ...prevState,
+        isLoading: false,
+        error: "Failed to fetch story data, please try again.",
+      }));
     }
-
-    // Fetch the story summary
-    const { newStorySummary, storyStatus } = await fetchStorySummary(
-      storySegment,
-      apiKey,
-      provider
-    );
-
-    // Update state once with conditional properties
-    setState((prevState) => ({
-      ...prevState,
-      storySummary: [...prevState.storySummary, option.text, newStorySummary],
-      storyAndUserInputs: [
-        ...prevState.storyAndUserInputs,
-        option.text,
-        storySegment,
-      ],
-      storyStatus,
-      turnCount: prevState.turnCount + 1,
-      previousParagraph: storySegment,
-      options,
-      isLoading: false,
-      ...(isFinal
-        ? {
-            isFinal: true,
-            gameState: "endingScreen",
-            ...wrapUpDetails,
-          }
-        : {}),
-    }));
   };
   return handleUserInput;
 };
