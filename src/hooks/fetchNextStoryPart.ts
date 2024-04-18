@@ -19,21 +19,6 @@ const fetchNextStoryPartAndOptions = async (
   apiKey: string,
   provider: string
 ): Promise<NextStoryPart> => {
-  // const formatStorySummary = (storySummary: string[]): string => {
-  //   let storySummaryFormatted = "";
-
-  //   for (let i = 0; i < storySummary.length; i++) {
-  //     if (i % 2 === 0) {
-  //       storySummaryFormatted += `${i / 2 + 1} Story Segment: "${
-  //         storySummary[i]
-  //       }" - `;
-  //     } else {
-  //       storySummaryFormatted += `User's Choice: "${storySummary[i]}"\n`;
-  //     }
-  //   }
-
-  //   return storySummaryFormatted;
-  // };
   const prompt1 = `
   You're an AI continuing our text adventure game featuring "${chosenCharacter}", who is ${characterGender}, in the genre "${chosenGenre}". They have traits like "${characterTraits.join(
     '", "'
@@ -53,6 +38,7 @@ const fetchNextStoryPartAndOptions = async (
   Provide 2-4 choices for further exploration, each distinct and logical.
 
   Strictly put your responses in this JSON format:
+
   {
     "storySegment": "Text of the opening paragraph or scene, 65-200 words",
     "options": {
@@ -94,6 +80,7 @@ const fetchStorySummary = async (
     - Any other important details for narrative consistency and continuity
 
     Strictly put your responses in this JSON format:
+
     {
       "storySummary": "{summary of the story segment}",
     }
