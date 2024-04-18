@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from "axios";
 
 // Define interfaces for better type management
 interface BaseProviderConfig {
@@ -17,7 +17,10 @@ interface ProviderConfig extends BaseProviderConfig {
 }
 
 interface GroqSDK {
-  new (config: { apiKey: string; dangerouslyAllowBrowser: boolean }): GroqInstance;
+  new (config: {
+    apiKey: string;
+    dangerouslyAllowBrowser: boolean;
+  }): GroqInstance;
 }
 
 interface GroqInstance {
@@ -45,18 +48,18 @@ const Groq: GroqSDK = require("groq-sdk");
 
 // Configuration for each provider
 const config: { [key: string]: ProviderConfig } = {
-  'groq': {
-    model: 'mixtral-8x7b-32768',
+  groq: {
+    model: "mixtral-8x7b-32768",
     sdk: Groq,
-    apiKey: '',
-    function: groqRequest as any // Casting to any to bypass TypeScript complaints temporarily
+    apiKey: "",
+    function: groqRequest as any, // Casting to any to bypass TypeScript complaints temporarily
   },
-  'chatgpt': {
-    model: 'gpt-4.0-turbo',
-    url: 'https://api.openai.com/v1/engines/gpt-4.0-turbo/completions',
-    apiKey: '',
-    function: chatgptRequest
-  }
+  chatgpt: {
+    model: "gpt-4.0-turbo",
+    url: "https://api.openai.com/v1/engines/gpt-4.0-turbo/completions",
+    apiKey: "",
+    function: chatgptRequest,
+  },
   // 'claud': {
   //   model: 'claud-base',
   //   url: 'https://api.claud.ai/v1/completions',
@@ -66,24 +69,35 @@ const config: { [key: string]: ProviderConfig } = {
 };
 
 // Central request function to switch between providers
-const request = async (prompt: string, apiKey: string, provider: string): Promise<string[]> => {
+const request = async (
+  prompt: string,
+  apiKey: string,
+  provider: string
+): Promise<string[]> => {
   const providerConfig = config[provider];
   if (!providerConfig) {
-    throw new Error('Unsupported provider');
+    throw new Error("Unsupported provider");
   }
   providerConfig.apiKey = apiKey || providerConfig.apiKey;
   return providerConfig.function(prompt, providerConfig);
 };
 
 // Groq request function
-async function groqRequest(prompt: string, { sdk, apiKey, model }: GroqProviderConfig): Promise<string[]> {
+async function groqRequest(
+  prompt: string,
+  { sdk, apiKey, model }: GroqProviderConfig
+): Promise<string[]> {
   if (!sdk) {
-    throw new Error('SDK configuration is missing for Groq request.');
+    throw new Error("SDK configuration is missing for Groq request.");
   }
   const groq: GroqInstance = new sdk({
     apiKey: apiKey,
-    dangerouslyAllowBrowser: true
+    dangerouslyAllowBrowser: true,
   });
+
+  const delay = (ms: number) =>
+    new Promise<void>((resolve) => setTimeout(resolve, ms));
+  const defaultDelayMs = 5000; // Default delay of 5000 ms
 
   while (true) {
     try {
@@ -93,28 +107,64 @@ async function groqRequest(prompt: string, { sdk, apiKey, model }: GroqProviderC
         temperature: 1,
         stream: false,
         response_format: { type: "json_object" },
-        stop: null
+        stop: null,
       });
-      return response.choices.map(choice => choice.message.content);
+      return response.choices.map((choice) => choice.message.content);
     } catch (error: any) {
-      if (error.response && error.response.status === 429) {
-        console.log('Rate limit exceeded, retrying in 3 seconds...');
-        await new Promise(resolve => setTimeout(resolve, 3000));
+      // Check if the error message indicates a rate limit error
+      if (
+        typeof error.message === "string" &&
+        error.message.startsWith("429")
+      ) {
+        try {
+          const jsonStartIndex = error.message.indexOf("{");
+          const errorDetails = JSON.parse(
+            error.message.substring(jsonStartIndex)
+          );
+          const message = errorDetails.error.message;
+          console.log("Rate limit error message:", message);
+
+          const matchMs = message.match(/Please try again in (\d+(\.\d+)?)ms/);
+          const matchS = message.match(/Please try again in (\d+(\.\d+)?)s/);
+          let retryAfterMs = defaultDelayMs; // Use default delay if parsing fails
+
+          if (matchMs && matchMs[1]) {
+            retryAfterMs = parseFloat(matchMs[1]);
+          } else if (matchS && matchS[1]) {
+            retryAfterMs = parseFloat(matchS[1]) * 1000; // Convert seconds to milliseconds
+          } else {
+            console.error(
+              "Failed to parse retry delay, using default:",
+              defaultDelayMs
+            );
+          }
+
+          console.error(
+            `Rate limit exceeded. Waiting ${retryAfterMs} milliseconds before retrying...`
+          );
+          await delay(retryAfterMs);
+        } catch (parseError) {
+          console.error("Error parsing rate limit JSON:", parseError);
+          await delay(defaultDelayMs);
+        }
       } else {
-        console.error('Error occurred while making request:', error);
-        throw error;
+        console.error("Non-rate limit error encountered:", error);
+        throw error; // Rethrow if error is not a rate limit
       }
     }
   }
-};
+}
 
 // ChatGPT request function
-async function chatgptRequest(prompt: string, config: BaseProviderConfig): Promise<string[]> {
-  const { url, apiKey, model } = config;  // Destructuring for ease of use
+async function chatgptRequest(
+  prompt: string,
+  config: BaseProviderConfig
+): Promise<string[]> {
+  const { url, apiKey, model } = config; // Destructuring for ease of use
 
   const headers = {
-    'Authorization': `Bearer ${apiKey}`,
-    'Content-Type': 'application/json'
+    Authorization: `Bearer ${apiKey}`,
+    "Content-Type": "application/json",
   };
 
   const data = {
@@ -130,11 +180,11 @@ async function chatgptRequest(prompt: string, config: BaseProviderConfig): Promi
     return response.data.choices.map((choice: any) => choice.text);
   } catch (error: any) {
     if (error.response && error.response.status === 429) {
-      console.log('Rate limit exceeded, retrying in 3 seconds...');
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      console.log("Rate limit exceeded, retrying in 3 seconds...");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       return chatgptRequest(prompt, config); // Retry with the same config object
     } else {
-      console.error('Error occurred while making request:', error);
+      console.error("Error occurred while making request:", error);
       throw error;
     }
   }
@@ -146,5 +196,3 @@ async function chatgptRequest(prompt: string, config: BaseProviderConfig): Promi
 // }
 
 export default request;
-
-

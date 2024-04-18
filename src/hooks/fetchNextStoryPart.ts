@@ -19,49 +19,39 @@ const fetchNextStoryPartAndOptions = async (
   apiKey: string,
   provider: string
 ): Promise<NextStoryPart> => {
-  const formatStorySummary = (storySummary: string[]): string => {
-    let storySummaryFormatted = "";
+  // const formatStorySummary = (storySummary: string[]): string => {
+  //   let storySummaryFormatted = "";
 
-    for (let i = 0; i < storySummary.length; i++) {
-      if (i % 2 === 0) {
-        storySummaryFormatted += `${i / 2 + 1} Story Segment: "${
-          storySummary[i]
-        }" - `;
-      } else {
-        storySummaryFormatted += `User's Choice: "${storySummary[i]}"\n`;
-      }
-    }
+  //   for (let i = 0; i < storySummary.length; i++) {
+  //     if (i % 2 === 0) {
+  //       storySummaryFormatted += `${i / 2 + 1} Story Segment: "${
+  //         storySummary[i]
+  //       }" - `;
+  //     } else {
+  //       storySummaryFormatted += `User's Choice: "${storySummary[i]}"\n`;
+  //     }
+  //   }
 
-    return storySummaryFormatted;
-  };
-
+  //   return storySummaryFormatted;
+  // };
   const prompt1 = `
-  Please read this entire prompt before starting the task.
-  You're an AI continuing our text-based adventure game. Remember, our main character is "${chosenCharacter}" who is ${characterGender}, in the genre "${chosenGenre}". The character has these unique traits "${characterTraits.join(
+  You're an AI continuing our text adventure game featuring "${chosenCharacter}", who is ${characterGender}, in the genre "${chosenGenre}". They have traits like "${characterTraits.join(
     '", "'
-  )}" and a compelling backstory "${characterBio}".
-  This is a summary of the previous segments and user's choices: 
-  ${formatStorySummary(storySummary.slice(-16))}
-  Review this carefully to ensure no scenarios or options are repeated.
-  
-  Given the previous paragraph "${previousParagraph}" and the user's action "${
+  )}", and a backstory "${characterBio}". Here's a brief of the recent plot and user choices: ${storySummary.slice(
+    -16
+  )}. 
+  Given the recent events "${previousParagraph}" and the user's latest action "${
     input.text
-  }", create the next segment of the story (65-200 words). Ensure the story:
-  - Continues logically from what has happened so far, building on the summary of previous segments and user choices.
-  - Uses second person ("you" or "your") when referring to the main character.
-  - Is unique, avoids clichés, and incorporates literary techniques such as foreshadowing, non-linear narratives, or vivid imagery to enhance depth and interest.
-  - Includes detailed, immersive descriptions that bring scenes to life and heighten player engagement.
-  - Builds tension and suspense, progressively leading towards significant narrative peaks.
-  - Incorporates meaningful choices that have tangible consequences, reflecting the gravity of decisions.
-  - Further develops character relationships and dynamics, enriching the narrative fabric.
-  - Balances action, dialogue, and descriptive elements for a well-rounded story experience.
-  - Respects the user's decisions, even if they lead to challenging outcomes, and ensures all character quirks and backstory elements are contextually appropriate.
+  }", craft the next segment (65-200 words). This should:
+  - Follow logically from previous events and user choices.
+  - Use second person for the main character.
+  - Incorporate literary techniques to enhance depth (e.g., foreshadowing, vivid imagery).
+  - Include immersive descriptions, build suspense, and develop character dynamics.
+  - Offer balanced action, dialogue, and descriptions.
+  - Reflect user decisions, maintaining all character traits and backstory relevance.
   
-  Provide 2-4 game options that allow the player to explore the story further. Each option should:
-  - Be engaging, unique, and logical within the story's progression and the character's actions.
-  - Fit the game's setting and lead to distinct narrative paths with different risks (low, medium, high).
-  - Include at least one "risky" option to introduce unpredictability and challenge.
-  
+  Provide 2-4 choices for further exploration, each distinct and logical.
+
   Strictly put your responses in this JSON format:
   {
     "storySegment": "Text of the opening paragraph or scene, 65-200 words",
@@ -72,80 +62,52 @@ const fetchNextStoryPartAndOptions = async (
   }  
   `;
 
-  let response;
-  let responseObject: NextStoryPart = {
-    storySegment: "",
-    options: {},
-  };
-  let success = false;
-
-  while (!success) {
+  while (true) {
     try {
-      response = await chatGPTRequest(prompt1, apiKey, provider);
-      responseObject = processJson<NextStoryPart>(response[0]);
+      const response = await chatGPTRequest(prompt1, apiKey, provider);
+      const responseObject: NextStoryPart = processJson<NextStoryPart>(
+        response[0]
+      );
 
-      // Filter options
       const filteredOptions = filterOptionsNew(responseObject.options);
       responseObject.options = filteredOptions;
 
-      // console.log("responseObject", responseObject);
-      success = true;
-    } catch (error) {
-      console.error("Error processing response, retrying request...", error);
+      return responseObject;
+    } catch (error: any) {
+      console.error("Error processing response retrying");
     }
   }
-
-  return responseObject;
 };
-
-interface StorySummary {
-  newStorySummary: string;
-  storyStatus: string;
-}
 
 const fetchStorySummary = async (
   storySegment: string,
   apiKey: string,
   provider: string
-): Promise<StorySummary> => {
+): Promise<string> => {
   const prompt2 = `
-  Write a concise summary of this story segment "${storySegment}" in one paragraph. The summary should include:
-  - Character interactions (actions, dialogues, emotions, reactions)
-  - Exact locations of characters and changes in location
-  - Current inventory of each character (acquisition, usage, or loss of items)
-  - Changes in character relationships (alliances, conflicts, interactions)
-  - Key events or discoveries that affect the story or characters
-  - Any other important details for narrative consistency and continuity
+    Write a concise summary of this story segment "${storySegment}" in one paragraph no more than 40 words. The summary should include:
+    - Character interactions (actions, dialogues, emotions, reactions)
+    - Exact locations of characters and changes in location
+    - Current inventory of each character (acquisition, usage, or loss of items)
+    - Changes in character relationships (alliances, conflicts, interactions)
+    - Key events or discoveries that affect the story or characters
+    - Any other important details for narrative consistency and continuity
 
-  also, provide the status of the story (ongoing, completed or died).
-
-  Strictly put your responses in this JSON format:
-  {
-    "storySummary": "{summary of the story segment}",
-    "storyStatus": "{status of the story, e.g., ongoing, completed}"
-  }
+    Strictly put your responses in this JSON format:
+    {
+      "storySummary": "{summary of the story segment}",
+    }
   `;
 
-  let response;
-  let responseObject: StorySummary = {
-    newStorySummary: "",
-    storyStatus: "",
-  };
-  let success = false;
-
-  while (!success) {
+  while (true) {
     try {
-      response = await chatGPTRequest(prompt2, apiKey, provider);
-      responseObject = processJson<StorySummary>(response[0]);
-
-      // console.log("responseObject", responseObject);
-      success = true;
-    } catch (error) {
-      console.error("Error processing response, retrying request...", error);
+      const response = await chatGPTRequest(prompt2, apiKey, provider);
+      const responseObject = processJson<{ storySummary: string }>(response[0]);
+      return responseObject.storySummary; // Return summary on success
+    } catch (error: any) {
+      console.error("Failed to parse retrying");
     }
   }
-
-  return responseObject;
 };
 
 export { fetchNextStoryPartAndOptions, fetchStorySummary };

@@ -13,11 +13,10 @@ import { AppContext } from "./AppContext";
 import useStoryProgress from "./hooks/useStoryProgress";
 import EndingScreen from "./components/EndingScreen";
 import GameLoadOrCreate from "./components/GameLoadOrCreate";
-import { saveStoryToDB } from "./helpers/indexedDB";
-import DroneComponent from "./components/DroneComponent";
+import { saveOrUpdateStory } from "./helpers/indexedDB";
 
 const App: React.FC = () => {
-  const { state } = useContext(AppContext);
+  const { state, setState } = useContext(AppContext);
   const {
     chosenGenre,
     chosenCharacter,
@@ -26,7 +25,6 @@ const App: React.FC = () => {
     chosenImage,
     options,
     gameState,
-    storySummary,
     storyAndUserInputs,
     turnCount,
     isLoading,
@@ -38,16 +36,15 @@ const App: React.FC = () => {
     themeExploration,
   } = state;
 
-  useEffect(() => {
-    if (gameState === "playing") {
-      try {
-        saveStoryToDB(state);
-      } catch (error) {
-        console.error("Failed to save game:", error);
-      }
-    }
-  }, [state]);
+  if (isFinal) {
+    setState((prevState) => ({ ...prevState, gameState: "endingScreen" }));
+  }
 
+  useEffect(() => {
+    if (gameState === "playing" || gameState === "endingScreen") {
+      saveOrUpdateStory(state);
+    }
+  }, [options]);
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
 
   useFetchGameData(setLoadingProgress);

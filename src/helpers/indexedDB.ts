@@ -8,7 +8,7 @@ export const openDB = (): Promise<IDBDatabase> => {
     openRequest.onupgradeneeded = () => {
       const db = openRequest.result;
       if (!db.objectStoreNames.contains("stories")) {
-        db.createObjectStore("stories", { keyPath: "id", autoIncrement: true });
+        db.createObjectStore("stories", { keyPath: "id" });
       }
     };
     openRequest.onsuccess = () => resolve(openRequest.result);
@@ -35,6 +35,35 @@ export const getNextIdFromDB = async (): Promise<number> => {
   });
 };
 
+export const assignNewId = async () => {
+  const db = await openDB();
+  const transaction = db.transaction("stories", "readonly");
+  const store = transaction.objectStore("stories");
+  const allKeysRequest = store.getAllKeys();
+
+  return new Promise((resolve, reject) => {
+    allKeysRequest.onsuccess = () => {
+      let keys: any;
+      keys = allKeysRequest.result;
+      const highestKey = keys.length > 0 ? Math.max(...keys) : 0;
+      resolve(highestKey + 1); // Assuming `id` is numeric.
+    };
+    allKeysRequest.onerror = () => reject(allKeysRequest.error);
+  });
+};
+
+export const saveOrUpdateStory = async (story: any) => {
+  if (!story.id) {
+    story.id = await assignNewId(); // Ensure a new id is assigned if missing.
+  }
+  try {
+    await saveStoryToDB(story);
+    console.log("Story saved successfully.");
+  } catch (error) {
+    console.error("Error saving the story:", error);
+  }
+};
+
 export const saveStoryToDB = async (storyData: any): Promise<void> => {
   const db = await openDB();
   const transaction = db.transaction("stories", "readwrite");
@@ -43,7 +72,6 @@ export const saveStoryToDB = async (storyData: any): Promise<void> => {
   return new Promise((resolve, reject) => {
     console.log(storyData);
     const request = store.put(storyData);
-
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);
   });

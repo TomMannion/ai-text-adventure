@@ -52,6 +52,7 @@ const fetchEndingStoryPartAndOptions = async (
     - Develop character relationships and dynamics, enriching the narrative fabric and balancing action, dialogue, and descriptive elements for a well-rounded experience.
     Focus on delivering a narrative that not only advances or concludes the story but also enriches the player's experience by making each decision and story development memorable and impactful.
     Provide 2-4 options if continuing, tailored to the narrative and character actions.
+    
     Strictly put your responses in this JSON format:
     {
       "storySegment": "Text of the final or ongoing story segment",

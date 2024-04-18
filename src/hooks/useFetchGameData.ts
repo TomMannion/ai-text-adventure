@@ -2,6 +2,7 @@ import { useEffect, useContext } from "react";
 import { AppContext } from "../AppContext";
 import fetchCharacterTraitsAndBio from "./fetchCharacterTraitsAndBio";
 import { fetchStoryStart, fetchStorySummary } from "./fetchStartOfStory";
+import { saveOrUpdateStory } from "../helpers/indexedDB";
 
 const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
   const { state, setState } = useContext(AppContext);
@@ -70,14 +71,7 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
     };
 
     fetchGameWorldAndCharacterInfo();
-  }, [
-    chosenCharacter,
-    setLoadingProgress,
-    setState,
-    apiKey,
-    chosenGenre,
-    storyStart,
-  ]);
+  }, [chosenCharacter, setLoadingProgress]);
 
   useEffect(() => {
     if (storyStart !== "") {
@@ -86,8 +80,9 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
         ...prevState,
         gameState: "playing",
       }));
+      saveOrUpdateStory(state);
     }
-  }, [storyStart, setState]);
+  }, [storyStart]);
 };
 
 export default useFetchGameData;

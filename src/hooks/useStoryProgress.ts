@@ -9,6 +9,7 @@ import {
   fetchEndingStoryPartAndOptions,
   fetchDetailedStorySummary,
 } from "./fetchEndingStoryPartAndOptions";
+import { saveOrUpdateStory } from "../helpers/indexedDB";
 
 interface Option {
   text: string;
@@ -81,7 +82,7 @@ const useStoryProgress = () => {
         options = response.options;
       }
 
-      const { newStorySummary, storyStatus } = await fetchStorySummary(
+      const newStorySummary = await fetchStorySummary(
         storySegment,
         apiKey,
         provider
@@ -89,13 +90,15 @@ const useStoryProgress = () => {
 
       setState((prevState) => ({
         ...prevState,
-        storySummary: [...prevState.storySummary, option.text, newStorySummary],
+        storySummary: [
+          ...prevState.storySummary,
+          " :USERS CHOICE: " + option.text + " : " + newStorySummary,
+        ],
         storyAndUserInputs: [
           ...prevState.storyAndUserInputs,
           option.text,
           storySegment,
         ],
-        storyStatus,
         turnCount: prevState.turnCount + 1,
         previousParagraph: storySegment,
         options,

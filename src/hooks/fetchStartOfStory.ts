@@ -7,6 +7,10 @@ interface StartOfStory {
   options: { [key: string]: { text: string; risk: string } };
 }
 
+const delay = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const defaultDelayMs = 5000; // Default delay of 5000 ms
+
 const fetchStoryStart = async (
   chosenGenre: string,
   chosenCharacter: string,
@@ -82,14 +86,25 @@ const fetchStoryStart = async (
   }
   `;
 
-  const response = await chatGPTRequest(prompt1, apiKey, provider);
-  const responseObject: StartOfStory = processJson<StartOfStory>(response[0]);
+  let attempts = 0;
+  const maxAttempts = 5; // Maximum number of attempts before failing
 
-  // Filter options
-  const filteredOptions = filterOptionsNew(responseObject.options);
-  responseObject.options = filteredOptions;
+  while (attempts < maxAttempts) {
+    try {
+      const response = await chatGPTRequest(prompt1, apiKey, provider);
+      const responseObject: StartOfStory = processJson<StartOfStory>(
+        response[0]
+      );
 
-  return responseObject;
+      const filteredOptions = filterOptionsNew(responseObject.options);
+      responseObject.options = filteredOptions;
+
+      return responseObject; // Return response on success
+    } catch (error: any) {
+      console.error("Failed to parse retrying");
+    }
+  }
+  throw new Error("Max retry attempts reached, unable to fetch data.");
 };
 
 const fetchStorySummary = async (
@@ -98,25 +113,35 @@ const fetchStorySummary = async (
   provider: string
 ): Promise<string> => {
   const prompt2 = `
-  Given the following story start: "${storyStart}", write a concise summary of the opening story segment in one paragraph.The summary should include:
-- A summary of character interactions (actions, dialogues, emotions, reactions)
-- Exact locations of characters and changes in location
-- Current inventory of each character (acquisition, usage, or loss of items)
-- Changes in character relationships (alliances, conflicts, interactions)
-- Key events or discoveries that affect the story or characters
-- Any other important details for narrative consistency and continuity
+  Given the following story start: "${storyStart}", write a concise summary of the opening story segment in one paragraph. The summary should include:
+  - A summary of character interactions (actions, dialogues, emotions, reactions)
+  - Exact locations of characters and changes in location
+  - Current inventory of each character (acquisition, usage, or loss of items)
+  - Changes in character relationships (alliances, conflicts, interactions)
+  - Key events or discoveries that affect the story or characters
+  - Any other important details for narrative consistency and continuity
 
-Strictly put your responses in this JSON format:
-{
-  "newStorySummary": "{summary of story segment}",
-}
+  Strictly put your responses in this JSON format:
+  {
+    "newStorySummary": "{summary of story segment}",
+  }
+  `;
 
-`;
+  let attempts = 0;
+  const maxAttempts = 10; // Maximum number of retry attempts
 
-  const response = await chatGPTRequest(prompt2, apiKey, provider);
-  const responseObject = processJson<{ newStorySummary: string }>(response[0]);
-
-  return responseObject.newStorySummary;
+  while (attempts < maxAttempts) {
+    try {
+      const response = await chatGPTRequest(prompt2, apiKey, provider);
+      const responseObject = processJson<{ newStorySummary: string }>(
+        response[0]
+      );
+      return responseObject.newStorySummary; // Successfully return the summary
+    } catch (error: any) {
+      console.error("Failed to parse retrying");
+    }
+  }
+  throw new Error("Max retry attempts reached, unable to fetch data.");
 };
 
 export { fetchStoryStart, fetchStorySummary };
