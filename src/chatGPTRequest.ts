@@ -102,7 +102,10 @@ async function groqRequest(
   while (true) {
     try {
       const response: GroqResponse = await groq.chat.completions.create({
-        messages: [{ role: "user", content: prompt }],
+        messages: [
+          { role: "system", content: "JSON" },
+          { role: "user", content: prompt },
+        ],
         model: model,
         temperature: 1,
         stream: false,
