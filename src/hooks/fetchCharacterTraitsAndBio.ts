@@ -18,23 +18,28 @@ const fetchCharacterTraitsAndBio = async (
 ) => {
   const maxWords = 70;
   const characterTraitsAndBioPrompt = `
-  Construct a detailed character profile for a text-adventure game based on the genre '${chosenGenre}' and the main character '${chosenCharacter}'. Include these three components:
-
-  1. Five personality traits that display a mix of good and bad qualities. Consider various personalities from adventurous to mundane.
-  2. a gender for the character, male, female, or non-binary.
-  3. A short bio (up to ${maxWords} words) emphasizing the character's unique skills and abilities. Incorporate 2-4 abilities or skills, which may be exceptional talents, learned skills, or supernatural powers, depending on the genre. Avoid clichés by thinking of less commonly used character descriptions in the genre. Don't mention specific locations or future plans.
-  4. Key visual facial features of the characters face, such as eye color, hair color, skin color, or other distinguishing or interesting features.
+  Based on the parameters:
+  - Character's Name: ${chosenCharacter}
+  - Chosen Genre: ${chosenGenre}
   
-  For the chosen gender please always use the correct pronouns in the bio and quirks.
-  Please output the information in the following JSON format:
+  Generate character details for ${chosenCharacter}, a character in the genre ${chosenGenre}, ensuring that the quirks, bio, and traits align with their occupation and setting. These details should reflect a range of personalities, from humorously mundane if fitting (e.g., a grocery clerk on an unexpected adventure) to more traditionally heroic or notable (e.g., a hardened blacksmith or daring gunslinger). Include a modern understanding of gender inclusivity.
+  
+  1. Character Quirks: Create a list of quirks or traits. If the character's occupation or role suggests an ordinary or mundane life, these quirks should be humorously commonplace (e.g., "obsessively organizes cans by label color"). For more adventurous roles, the quirks should be distinctly bold or characteristic (e.g., "can forge a sword blindfolded").
+  
+  2. Gender: Assign a gender to the character that is inclusive, considering modern identities such as female, male, or non-binary.
+  
+  3. Character Bio: Write a concise biography of up to 80 words, reflecting the character's mundane or extraordinary background. The tone can range from comedic to serious, tailored to enhance the character's role and setting.
+  
+  4. Character Facial Features: List facial features that are distinctive and contribute to the character's visual identity. Features should be vivid and can include humorous or plain elements depending on the character’s overall tone.
+  
+  Output should be in the following JSON format:
   
   {
-    "characterQuirks": ["quirk-1", ... "quirk-n]
+    "characterQuirks": ["quirk-1", "quirk-2", ... "quirk-n"],
     "gender": "specified gender",
-    "characterBio": "detailed biography, max words 150",
+    "characterBio": "Generated biography here.",
     "characterFacialFeatures": ["feature1", "feature2", "feature3", "feature4", "feature5", ...]
-  }
-  
+  }  
 `;
 
   const fetchedCharacterTraitsAndBio = await chatGPTRequest(

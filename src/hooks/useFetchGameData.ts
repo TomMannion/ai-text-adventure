@@ -80,7 +80,6 @@ const useFetchGameData = (setLoadingProgress: (progress: number) => void) => {
         ...prevState,
         gameState: "playing",
       }));
-      saveOrUpdateStory(state);
     }
   }, [storyStart]);
 };

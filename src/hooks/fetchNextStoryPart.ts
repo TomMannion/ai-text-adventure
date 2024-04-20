@@ -4,13 +4,13 @@ import filterOptionsNew from "../utils/filterOptionsNew";
 
 interface NextStoryPart {
   storySegment: string;
-  options: { [key: string]: { text: string; risk: string } };
+  options: { [key: string]: { text: string } };
 }
 
 const fetchNextStoryPartAndOptions = async (
   storySummary: string[],
   previousParagraph: string,
-  input: { text: string; risk: string },
+  input: { text: string },
   chosenCharacter: string,
   chosenGenre: string,
   characterTraits: string[],
@@ -20,33 +20,31 @@ const fetchNextStoryPartAndOptions = async (
   provider: string
 ): Promise<NextStoryPart> => {
   const prompt1 = `
-  You're an AI continuing our text adventure game featuring "${chosenCharacter}", who is ${characterGender}, in the genre "${chosenGenre}". They have traits like "${characterTraits.join(
-    '", "'
-  )}", and a backstory "${characterBio}". Here's a brief of the recent plot and user choices: ${storySummary.slice(
-    -16
-  )}. 
-  Given the recent events "${previousParagraph}" and the user's latest action "${
-    input.text
-  }", craft the next segment (65-200 words). This should:
-  - Follow logically from previous events and user choices.
-  - Use second person for the main character.
-  - Incorporate literary techniques to enhance depth (e.g., foreshadowing, vivid imagery).
-  - Include immersive descriptions, build suspense, and develop character dynamics.
-  - Offer balanced action, dialogue, and descriptions.
-  - Reflect user decisions, maintaining all character traits and backstory relevance.
+  Given the parameters:
+  - Character's Name: ${chosenCharacter}
+  - Chosen Genre: ${chosenGenre}
+  - Character Traits: ${characterTraits.join(
+    ", "
+  )}  // Optional, use to enrich the narrative when fitting
+  - Character Bio: ${characterBio}  // Optional, draw from it to add depth when suitable
+  - Recent Story Summary: ${storySummary.slice(-16)}
+  - Previous Paragraph: ${previousParagraph}
+  - User's Latest Choice: ${input.text}
   
-  Provide 2-4 choices for further exploration, each distinct and logical.
-
-  Strictly put your responses in this JSON format:
-
+  Create an engaging and descriptive story segment of 65-200 words that directly responds to and develops from the user's latest choice. The segment should delve into the consequences of this choice, exploring how it influences the current situation, relationships, or the unfolding plot. Ensure the story remains open for future choices, maintaining an interactive and immersive experience.
+  
+  Generate 2-4 compelling options for the player, each branching out from the latest choice and story so far. These should provide a diverse range of follow-up actions or reactions, indicating different potential paths the story could take.
+  
+  Output should be in the following JSON format:
+  
   {
-    "storySegment": "Text of the opening paragraph or scene, 65-200 words",
+    "storySegment": "Generated text here that builds directly on the user's last choice, advancing the story in a meaningful way.",
     "options": {
-      "option1": { "text": "Option text, 10-30 words", "risk": "low, medium, or high" },
-      // ... up to option4 in the same format
+      "option1": { "text": "Detail a next step or delve into the consequences of the previous choice. (10-30 words)"},
+      "option2": { "text": "Provide an alternative reaction or explore a subplot that might influence future events. (10-30 words)"},
+      // Additional options up to a total of 4, each varied and dynamically created based on the scene
     }
-  }  
-  `;
+  }`;
 
   while (true) {
     try {

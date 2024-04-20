@@ -5,7 +5,6 @@ import LoadingOverlay from "./LoadingOverlay";
 
 interface Option {
   text: string;
-  risk: string;
 }
 
 interface GameOutputProps {
@@ -13,7 +12,7 @@ interface GameOutputProps {
   genre: string;
   turnCount: number;
   isLoading: boolean;
-  options: { [key: string]: { text: string; risk: string } };
+  options: { [key: string]: { text: string } };
   isFinal: boolean;
   handleOptionsClick: (option: Option) => void;
 }

@@ -4,7 +4,6 @@ import "./Options.css";
 
 interface Option {
   text: string;
-  risk: string;
 }
 
 interface OptionsProps {

@@ -23,7 +23,7 @@ type AppState = {
   characterList: string;
   storyStart: string;
   storySummary: string[];
-  options: { [key: string]: { text: string; risk: string } };
+  options: { [key: string]: { text: string } };
   input: string;
   storySoFar: string[];
   storyAndUserInputs: string[];

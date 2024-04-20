@@ -13,7 +13,6 @@ import { saveOrUpdateStory } from "../helpers/indexedDB";
 
 interface Option {
   text: string;
-  risk: string;
 }
 
 const useStoryProgress = () => {

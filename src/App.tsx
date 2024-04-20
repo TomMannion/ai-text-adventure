@@ -26,6 +26,7 @@ const App: React.FC = () => {
     options,
     gameState,
     storyAndUserInputs,
+    previousParagraph,
     turnCount,
     isLoading,
     isFinal,
@@ -41,7 +42,11 @@ const App: React.FC = () => {
   }
 
   useEffect(() => {
-    if (gameState === "playing" || gameState === "endingScreen") {
+    if (
+      (gameState === "playing" || gameState === "endingScreen") &&
+      previousParagraph !== ""
+    ) {
+      console.log("we are here");
       saveOrUpdateStory(state);
     }
   }, [options]);
