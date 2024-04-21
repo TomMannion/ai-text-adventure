@@ -62,9 +62,11 @@ const fetchStoryStart = async (
   - Character Bio: ${characterBio}  // Optional, draw from it to add depth when suitable
   
   Generate an engaging opening scene of 65-200 words that sets the stage for the adventure, appropriate to the chosen genre. The scene should introduce the setting, hint at initial conflicts or dilemmas, and may incorporate the character's traits or backstory if they naturally fit the context. The narrative should immediately engage players and prepare them for diverse pathways in the story.
-  
-  Generate 2-4 compelling options for the player, each branching out from the latest choice and story so far. These should provide a diverse range of follow-up actions or reactions, indicating different potential paths the story could take.
-  
+  - Use second person ("you" or "your") to maintain an engaging, personal connection with the player.
+
+  Generate 2-4 compelling options for the player, each branching out from the latest choice and story so far. These should provide a diverse range of follow-up actions or reactions, indicating different potential paths the story could take. Please keep each option text between 10-30 words.
+  In the option text please only include what the character could do.
+
   Output should be in the following JSON format:
   
   {

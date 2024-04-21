@@ -9,7 +9,6 @@ import {
   fetchEndingStoryPartAndOptions,
   fetchDetailedStorySummary,
 } from "./fetchEndingStoryPartAndOptions";
-import { saveOrUpdateStory } from "../helpers/indexedDB";
 
 interface Option {
   text: string;
@@ -40,7 +39,8 @@ const useStoryProgress = () => {
       let response,
         wrapUpDetails = {};
 
-      if (turnCount >= 7) {
+      if (turnCount >= 6) {
+        console.log("we are ending");
         response = await fetchEndingStoryPartAndOptions(
           storySummary,
           previousParagraph,

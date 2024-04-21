@@ -49,7 +49,8 @@ const App: React.FC = () => {
       console.log("we are here");
       saveOrUpdateStory(state);
     }
-  }, [options]);
+  }, [previousParagraph]);
+
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
 
   useFetchGameData(setLoadingProgress);

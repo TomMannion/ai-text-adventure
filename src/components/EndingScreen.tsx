@@ -38,14 +38,7 @@ const EndingScreen: React.FC<EndingScreenProps> = ({
       const newDuration = totalHeight / speedFactor; // Calculate the duration based on height and speed factor
       setAnimationDuration(`${newDuration}s`);
     }
-  }, [
-    output,
-    wrapUpParagraph,
-    bigMoment,
-    frequentActivity,
-    characterTraitHighlight,
-    themeExploration,
-  ]);
+  }, []);
 
   const sliceCount = 5;
 

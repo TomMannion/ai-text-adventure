@@ -20,31 +20,62 @@ const fetchNextStoryPartAndOptions = async (
   provider: string
 ): Promise<NextStoryPart> => {
   const prompt1 = `
-  Given the parameters:
-  - Character's Name: ${chosenCharacter}
-  - Chosen Genre: ${chosenGenre}
-  - Character Traits: ${characterTraits.join(
+Given the parameters:
+- Character's Name: ${chosenCharacter}
+- Chosen Genre: ${chosenGenre}
+- Character Traits: ${characterTraits.join(
     ", "
-  )}  // Optional, use to enrich the narrative when fitting
-  - Character Bio: ${characterBio}  // Optional, draw from it to add depth when suitable
-  - Recent Story Summary: ${storySummary.slice(-16)}
-  - Previous Paragraph: ${previousParagraph}
-  - User's Latest Choice: ${input.text}
-  
-  Create an engaging and descriptive story segment of 65-200 words that directly responds to and develops from the user's latest choice. The segment should delve into the consequences of this choice, exploring how it influences the current situation, relationships, or the unfolding plot. Ensure the story remains open for future choices, maintaining an interactive and immersive experience.
-  
-  Generate 2-4 compelling options for the player, each branching out from the latest choice and story so far. These should provide a diverse range of follow-up actions or reactions, indicating different potential paths the story could take.
-  
-  Output should be in the following JSON format:
-  
-  {
-    "storySegment": "Generated text here that builds directly on the user's last choice, advancing the story in a meaningful way.",
-    "options": {
-      "option1": { "text": "Detail a next step or delve into the consequences of the previous choice. (10-30 words)"},
-      "option2": { "text": "Provide an alternative reaction or explore a subplot that might influence future events. (10-30 words)"},
-      // Additional options up to a total of 4, each varied and dynamically created based on the scene
-    }
-  }`;
+  )} // Now mandatory to use in the narrative
+- Character Bio: ${characterBio} // Now mandatory for depth in the story
+- Recent Story Summary: ${storySummary.slice(-16)}
+- Previous Paragraph: ${previousParagraph}
+- User's Latest Choice: ${input.text}
+
+Create an engaging and descriptive story segment of 65-200 words that directly responds to the user's latest choice. This segment should clearly steer the story back towards the main plot, focusing on a narrow set of consequences related to the choice. Ensure that while the segment allows for user interaction, it subtly guides them towards a predetermined outcome.
+
+- Use second person ("you" or "your") to maintain a personal connection with the player.
+
+Generate 2-4 compelling options for the player, each designed to steer the story back to the central plot. These options should explore different aspects of the same scenario, providing a sense of choice while maintaining control over the story direction. Each option text should be between 10-30 words.
+
+Output should be in the following JSON format:
+
+{
+  "storySegment": "Generated text here that builds on the user's last choice, advancing the story in a meaningful way while steering it towards the main plot.",
+  "options": {
+    "option1": { "text": "Explore further consequences of the previous choice, subtly hinting at the main plot." },
+    "option2": { "text": "Consider a reflective action that ties back to the central theme or goal of the character." },
+    // Additional options up to a total of 4, each varied yet focused on the main narrative
+  }
+}`;
+
+  // const prompt1 = `
+  // Given the parameters:
+  // - Character's Name: ${chosenCharacter}
+  // - Chosen Genre: ${chosenGenre}
+  // - Character Traits: ${characterTraits.join(
+  //   ", "
+  // )}  // Optional, use to enrich the narrative when fitting
+  // - Character Bio: ${characterBio}  // Optional, draw from it to add depth when suitable
+  // - Recent Story Summary: ${storySummary.slice(-16)}
+  // - Previous Paragraph: ${previousParagraph}
+  // - User's Latest Choice: ${input.text}
+
+  // Create an engaging and descriptive story segment of 65-200 words that directly responds to and develops from the user's latest choice. The segment should delve into the consequences of this choice, exploring how it influences the current situation, relationships, or the unfolding plot. Ensure the story remains open for future choices, maintaining an interactive and immersive experience.
+  // - Use second person ("you" or "your") to maintain an engaging, personal connection with the player.
+
+  // Generate 2-4 compelling options for the player, each branching out from the latest choice and story so far. These should provide a diverse range of follow-up actions or reactions, indicating different potential paths the story could take. Please keep each option text between 10-30 words.
+  // In the option text please only include what the character could do.
+
+  // Output should be in the following JSON format:
+
+  // {
+  //   "storySegment": "Generated next story segment text here that builds directly on the user's last choice, advancing the story in a meaningful way.",
+  //   "options": {
+  //     "option1": { "text": "Detail a next step or delve into the consequences of the previous choice."},
+  //     "option2": { "text": "Provide an alternative reaction or explore a subplot that might influence future events."},
+  //     // Additional options up to a total of 4, each varied and dynamically created based on the scene
+  //   }
+  // }`;
 
   while (true) {
     try {

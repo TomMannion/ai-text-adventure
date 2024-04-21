@@ -24,11 +24,11 @@ const fetchCharacterTraitsAndBio = async (
   
   Generate character details for ${chosenCharacter}, a character in the genre ${chosenGenre}, ensuring that the quirks, bio, and traits align with their occupation and setting. These details should reflect a range of personalities, from humorously mundane if fitting (e.g., a grocery clerk on an unexpected adventure) to more traditionally heroic or notable (e.g., a hardened blacksmith or daring gunslinger). Include a modern understanding of gender inclusivity.
   
-  1. Character Quirks: Create a list of quirks or traits. If the character's occupation or role suggests an ordinary or mundane life, these quirks should be humorously commonplace (e.g., "obsessively organizes cans by label color"). For more adventurous roles, the quirks should be distinctly bold or characteristic (e.g., "can forge a sword blindfolded").
+  1. Character Quirks: Create a list of quirks or traits. If the character's occupation or role suggests an ordinary or mundane life, these quirks should fit the character and could be be humorously commonplace (e.g., "obsessively organizes cans by label color") or for more adventurous characters, the quirks could be distinctly bold or characteristic (e.g., "can forge a sword blindfolded"). Please do not mention the characters appearance in the quirks.
   
   2. Gender: Assign a gender to the character that is inclusive, considering modern identities such as female, male, or non-binary.
   
-  3. Character Bio: Write a concise biography of up to 80 words, reflecting the character's mundane or extraordinary background. The tone can range from comedic to serious, tailored to enhance the character's role and setting.
+  3. Character Bio: Write a concise but engaging biography of between 50-100 words, reflecting the character's mundane or extraordinary background. The tone can range from comedic to serious, tailored to enhance this specific characters backstory.
   
   4. Character Facial Features: List facial features that are distinctive and contribute to the character's visual identity. Features should be vivid and can include humorous or plain elements depending on the character’s overall tone.
   
@@ -37,8 +37,8 @@ const fetchCharacterTraitsAndBio = async (
   {
     "characterQuirks": ["quirk-1", "quirk-2", ... "quirk-n"],
     "gender": "specified gender",
-    "characterBio": "Generated biography here.",
-    "characterFacialFeatures": ["feature1", "feature2", "feature3", "feature4", "feature5", ...]
+    "characterBio": "Generated biography here. (50-100 words)",
+    "characterFacialFeatures": ["feature-1", "feature-2", ... "feature-n"]
   }  
 `;
 
